@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'auth/auth.dart';
+import 'journal/journal.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme:
           ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan)),
       debugShowCheckedModeBanner: false,
-      home: const Auth(),
+      home: const Journal(),
     );
   }
 }
