@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'explore.dart';
 import 'profile.dart';
-import 'message.dart';
 
 class Journal extends StatefulWidget {
   const Journal({super.key});
@@ -21,7 +20,7 @@ class JournalState extends State<Journal> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.cyan,
+        indicatorColor: Colors.blue[200],
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
@@ -35,11 +34,6 @@ class JournalState extends State<Journal> {
             label: 'Explore',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.chat_bubble),
-            icon: Icon(Icons.chat_bubble_outline),
-            label: 'Messages',
-          ),
-          NavigationDestination(
             selectedIcon: Icon(Icons.account_circle),
             icon: Icon(Icons.account_circle_outlined),
             label: 'Proflie',
@@ -49,7 +43,6 @@ class JournalState extends State<Journal> {
       body: <Widget>[
         const Home(),
         const Explore(),
-        const Message(),
         const Profile(),
       ][currentPageIndex],
     );

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'auth/auth.dart';
 import 'journal/journal.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   bool isAuth = true;
   Widget home = const Auth();
   if (isAuth) {
