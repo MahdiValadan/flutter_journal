@@ -1,8 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:ui';
+import 'package:flutter_journal/widgets/alert.dart';
 
 class SignupCard extends StatelessWidget {
-  const SignupCard({super.key});
+  SignupCard({super.key});
+  String email = "";
+  String password = "";
+
+  void createAccount(emailAddress, password, context) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+      showAlertDialog(context, 'Success', 'Your Account has been created.');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showAlertDialog(context, 'Error', 'The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showAlertDialog(
+            context, 'Error', 'The account already exists for that email.');
+      }
+    } catch (e) {
+      showAlertDialog(context, 'Error', e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -24,11 +49,17 @@ class SignupCard extends StatelessWidget {
                     decoration: InputDecoration(labelText: 'Name'),
                   ),
                   const SizedBox(height: 20),
-                  const TextField(
+                  TextField(
+                    onChanged: (text) {
+                      email = text;
+                    },
                     decoration: InputDecoration(labelText: 'Email'),
                   ),
                   const SizedBox(height: 20),
-                  const TextField(
+                  TextField(
+                    onChanged: (text) {
+                      password = text;
+                    },
                     decoration: InputDecoration(labelText: 'Password'),
                     obscureText: true,
                   ),
@@ -37,8 +68,9 @@ class SignupCard extends StatelessWidget {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle login logic here
+                      onPressed: () => {
+                        // showAlertDialog(context)
+                        createAccount(email, password, context),
                       },
                       child: const Text('Sign up'),
                     ),

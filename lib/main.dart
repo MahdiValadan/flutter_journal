@@ -9,7 +9,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  bool isAuth = true;
+  bool isAuth = false;
   Widget home = const Auth();
   if (isAuth) {
     home = const Journal();

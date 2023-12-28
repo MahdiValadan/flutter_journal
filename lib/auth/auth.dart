@@ -25,7 +25,7 @@ class Auth extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          child: const TabBarView(
+          child: TabBarView(
             children: [
               LoginCard(),
               SignupCard(),
