@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -31,6 +32,17 @@ class Profile extends StatelessWidget {
                         elevation: 0,
                         label: const Text("Follow"),
                         icon: const Icon(Icons.person_add_alt_1),
+                      ),
+                      const SizedBox(width: 16.0),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        heroTag: 'logout',
+                        elevation: 0,
+                        backgroundColor: Colors.red,
+                        label: const Text("Logout"),
+                        icon: const Icon(Icons.logout),
                       ),
                     ],
                   ),
@@ -148,8 +160,7 @@ class _TopPortion extends StatelessWidget {
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     child: Container(
                       margin: const EdgeInsets.all(8.0),
-                      decoration: const BoxDecoration(
-                          color: Colors.green, shape: BoxShape.circle),
+                      decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
                     ),
                   ),
                 ),
