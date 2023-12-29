@@ -36,7 +36,7 @@ class Home extends StatelessWidget {
                       Expanded(
                           child: Text(
                         'Title: $index',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       )),
                     ],
                   ),
@@ -75,7 +75,7 @@ class SecondPage extends StatelessWidget {
           Expanded(
             child: Text(
               "Content goes here",
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           )
         ],

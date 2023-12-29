@@ -14,8 +14,8 @@ class LoginCard extends StatefulWidget {
 }
 
 class _LoginCardState extends State<LoginCard> {
-  String email = "";
-  String password = "";
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
   bool isLoading = false;
 
   Future<void> loginToAccount(email, password, context) async {
@@ -23,13 +23,14 @@ class _LoginCardState extends State<LoginCard> {
       isLoading = true;
     });
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email.text, password: password.text);
       // showAlertDialog(context, 'Success', 'OK');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         showAlertDialog(context, 'Error', 'Wrong email or password.');
       } else {
-        showAlertDialog(context, 'Error', e);
+        showAlertDialog(context, 'Error', e.code);
       }
     }
     setState(() {
@@ -45,8 +46,15 @@ class _LoginCardState extends State<LoginCard> {
           ? const Loading()
           : Card(
               elevation: 0,
-              color: Colors.white.withOpacity(0.3),
               margin: const EdgeInsets.all(30.0),
+              color: Colors.blueGrey.withOpacity(0.1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: const BorderSide(
+                  color: Colors.blueGrey, // Border color
+                  width: 1.0, // Border width
+                ),
+              ),
               // Frosted Glass
               child: ClipRect(
                 child: BackdropFilter(
@@ -57,16 +65,12 @@ class _LoginCardState extends State<LoginCard> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         TextField(
-                          onChanged: (text) {
-                            email = text;
-                          },
+                          controller: email,
                           decoration: const InputDecoration(labelText: 'Email'),
                         ),
                         const SizedBox(height: 20),
                         TextField(
-                          onChanged: (text) {
-                            password = text;
-                          },
+                          controller: password,
                           decoration: const InputDecoration(labelText: 'Password'),
                           obscureText: true,
                         ),

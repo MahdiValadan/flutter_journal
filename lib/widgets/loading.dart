@@ -11,7 +11,7 @@ class Loading extends StatelessWidget {
           color: Colors.white,
           constraints: const BoxConstraints.expand(),
           child: Center(
-            child: Lottie.asset('/lottie/loading.json', width: 300, height: 300),
+            child: Lottie.asset('assets/lottie/loading.json', width: 300, height: 300),
           ),
         ),
       ),

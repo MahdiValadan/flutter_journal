@@ -30,13 +30,15 @@ class _SignupCardState extends State<SignupCard> {
       showAlertDialog(context, 'Success', 'Your Account has been created.');
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Journal()),
+        MaterialPageRoute(builder: (context) => const Journal()),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showAlertDialog(context, 'Error', 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         showAlertDialog(context, 'Error', 'The account already exists for that email.');
+      } else {
+        showAlertDialog(context, 'Error', e.message);
       }
     } catch (e) {
       showAlertDialog(context, 'Error', e);
@@ -54,8 +56,15 @@ class _SignupCardState extends State<SignupCard> {
           ? const Loading()
           : Card(
               elevation: 0,
-              color: Colors.white.withOpacity(0.3),
               margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              color: Colors.blueGrey.withOpacity(0.1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: const BorderSide(
+                  color: Colors.blueGrey, // Border color
+                  width: 1.0, // Border width
+                ),
+              ),
               // Frosted Glass
               child: ClipRect(
                 child: BackdropFilter(
@@ -73,17 +82,17 @@ class _SignupCardState extends State<SignupCard> {
                           onChanged: (text) {
                             email = text;
                           },
-                          decoration: InputDecoration(labelText: 'Email'),
+                          decoration: const InputDecoration(labelText: 'Email'),
                         ),
                         const SizedBox(height: 20),
                         TextField(
                           onChanged: (text) {
                             password = text;
                           },
-                          decoration: InputDecoration(labelText: 'Password'),
+                          decoration: const InputDecoration(labelText: 'Password'),
                           obscureText: true,
                         ),
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 38),
                         SizedBox(
                           width: double.infinity,
                           height: 50,

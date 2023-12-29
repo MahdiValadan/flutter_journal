@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_journal/AuthHandler.dart';
+import 'package:flutter_journal/auth_handler.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Journal',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan)),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)),
       debugShowCheckedModeBanner: false,
       home: const AuthHandler(),
     );

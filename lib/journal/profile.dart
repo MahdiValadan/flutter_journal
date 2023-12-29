@@ -40,7 +40,7 @@ class Profile extends StatelessWidget {
                         },
                         heroTag: 'logout',
                         elevation: 0,
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.pink[100],
                         label: const Text("Logout"),
                         icon: const Icon(Icons.logout),
                       ),
@@ -102,7 +102,7 @@ class _ProfileInfoRow extends StatelessWidget {
           ),
           Text(
             item.title,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           )
         ],
       );
@@ -128,7 +128,7 @@ class _TopPortion extends StatelessWidget {
               gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  colors: [Color(0xff0043ba), Color(0xff006df1)]),
+                  colors: [Colors.lightBlue, Colors.cyan]),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(50),
                 bottomRight: Radius.circular(50),
