@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 // Pages
 import 'package:flutter_journal/auth/auth.dart';
-import 'package:flutter_journal/journal/journal.dart';
+import 'package:flutter_journal/pages/journal.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 
 class AuthHandler extends StatelessWidget {

@@ -11,6 +11,7 @@ class Auth extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('Flutter Journal')),
+          automaticallyImplyLeading: false,
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Login'),
