@@ -3,33 +3,37 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 // API
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_journal/Functions/file_uploader.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
+
 // Widget
 import 'package:flutter_journal/widgets/alert.dart';
 import 'package:flutter_journal/widgets/loading.dart';
+
 // Page
 import 'package:flutter_journal/pages/journal/landing.dart';
 
-class EditProfile extends StatefulWidget {
-  const EditProfile({super.key, required this.firstTime});
-  final bool firstTime;
+class CreatePost extends StatefulWidget {
+  const CreatePost({super.key});
+
   @override
-  State<EditProfile> createState() => _EditProfileState();
+  State<CreatePost> createState() => _CreatePostState();
 }
 
-class _EditProfileState extends State<EditProfile> {
+class _CreatePostState extends State<CreatePost> {
   // Controllers
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController name = TextEditingController();
+  final TextEditingController title = TextEditingController();
+  final TextEditingController content = TextEditingController();
 
   // Loading Status
   bool isLoading = false;
 
   // Profile Image
   XFile? image;
-  File? pickedImage;
+  late File pickedImage;
   bool showImage = false;
 
   Future<void> pickImage() async {
@@ -50,30 +54,39 @@ class _EditProfileState extends State<EditProfile> {
     });
     if (FirebaseAuth.instance.currentUser != null) {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      String? email = FirebaseAuth.instance.currentUser?.email;
-      var user = <String, dynamic>{};
-      if (widget.firstTime) {
-        user = <String, dynamic>{"Name": name, 'Followers': [], 'Following': [], 'Posts': []};
-      } else {
-        user = <String, dynamic>{"Name": name};
-      }
-      // Set New Data
-      await db.collection("users").doc(email).set(user);
-      if (pickedImage != null) {
-        FileUploader fileUploader = FileUploader(pickedImage!, 'profiles/$email.jpg');
-        try {
-          await fileUploader.uploadFile();
-        } catch (e) {
-          print(e);
-        }
-      }
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Landing(currentPageIndex: 2)),
-      );
+      String? email = FirebaseAuth.instance.currentUser?.email;
+
+      const uuid = Uuid();
+      String imageName = uuid.v4();
+      String imageUrl;
+
+      final Reference storageReference =
+          FirebaseStorage.instance.ref().child('posts/$email/$imageName.jpg');
+      final metadata = SettableMetadata(contentType: 'image/jpeg');
+
+      try {
+        await storageReference.putFile(pickedImage, metadata);
+        imageUrl = await storageReference.getDownloadURL();
+
+        var post = <String, dynamic>{
+          'Email': email,
+          'Title': title.text,
+          'Content': content.text,
+          'Image': imageUrl
+        };
+
+        await db.collection("posts").add(post);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Landing(currentPageIndex: 2)),
+        );
+      } catch (e) {
+        showAlertDialog(context, 'Error', e.toString());
+      }
     } else {
-      showAlertDialog(context, 'Error', 'Error');
+      showAlertDialog(context, 'Error', 'Invalid Access');
     }
     setState(() {
       isLoading = false;
@@ -83,8 +96,9 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Center(child: Text('Flutter Journal')),
+        title: const Center(child: Text('Create Post')),
         automaticallyImplyLeading: false,
       ),
       body: isLoading
@@ -99,7 +113,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               child: Card(
                 elevation: 0,
-                margin: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.all(10.0),
                 color: Colors.white.withOpacity(0.4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -119,62 +133,100 @@ class _EditProfileState extends State<EditProfile> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            //Profile Picture
+                            //Post Picture
                             InkWell(
                               onTap: () {
                                 pickImage();
                               },
                               child: Container(
-                                width: 100.0,
-                                height: 100.0,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
+                                width: double.infinity,
+                                height: 200.0,
+                                decoration: BoxDecoration(
                                   color: Colors.cyan,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: showImage
-                                    ? ClipOval(
-                                        child: Image.file(pickedImage!, fit: BoxFit.fill),
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.file(pickedImage, fit: BoxFit.fill),
                                       )
                                     : const Center(
                                         child: Icon(
-                                          Icons.add_a_photo_outlined,
+                                          Icons.add_photo_alternate_outlined,
                                           color: Colors.white,
-                                          size: 50,
+                                          size: 60,
                                         ),
                                       ),
                               ),
                             ),
 
+                            //Space
                             const SizedBox(height: 30),
 
-                            // Name
+                            // Title
                             TextFormField(
-                              decoration: const InputDecoration(labelText: 'Name'),
-                              controller: name,
+                              keyboardType: TextInputType.multiline,
+                              decoration: const InputDecoration(
+                                labelText: 'Title',
+                                // border: OutlineInputBorder(),
+                              ),
+                              controller: title,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your name';
+                                  return 'Please enter your journal title';
                                 }
                                 return null; // Return null if the input is valid.
                               },
                             ),
 
-                            const SizedBox(height: 40),
+                            // Space
+                            const SizedBox(height: 20),
+
+                            // Content
+                            Container(
+                              constraints: BoxConstraints(maxHeight: 300),
+                              child: TextFormField(
+                                keyboardType: TextInputType.multiline,
+                                decoration: const InputDecoration(
+                                  labelText: 'Content',
+                                  hintText: 'This is My Journay!! 🦊',
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: content,
+                                maxLines: null,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please write your journal';
+                                  }
+                                  return null; // Return null if the input is valid.
+                                },
+                              ),
+                            ),
+
+                            const Expanded(child: SizedBox()),
 
                             // Button Save
                             SizedBox(
                               width: double.infinity,
                               height: 50,
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green[400],
+                                  foregroundColor: Colors.white,
+                                ),
                                 onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    save(name.text, context);
+                                  if (_formKey.currentState!.validate() && showImage) {
+                                    save(content.text, context);
+                                  } else {
+                                    showAlertDialog(context, 'Error',
+                                        'Please Choose Image and Enter both title and content');
                                   }
                                 },
                                 child: const Text('Save'),
                               ),
                             ),
 
+                            // Space
                             const SizedBox(height: 20),
 
                             // Button Cancel
@@ -183,8 +235,9 @@ class _EditProfileState extends State<EditProfile> {
                               height: 50,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.pink[300],
-                                    foregroundColor: Colors.white),
+                                  backgroundColor: Colors.pink[400],
+                                  foregroundColor: Colors.white,
+                                ),
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                     context,

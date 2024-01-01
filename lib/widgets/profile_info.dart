@@ -1,27 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/models/profile_info_item.dart';
 
-class ProfileInfo extends StatelessWidget {
-  const ProfileInfo({super.key});
+class ProfileInfo extends StatefulWidget {
+  const ProfileInfo({super.key, required this.info});
+  final Map<String, dynamic> info;
+  @override
+  State<ProfileInfo> createState() => _ProfileInfoState();
+}
 
-  final List<ProfileInfoItem> _items = const [
-    ProfileInfoItem("Posts", 900),
-    ProfileInfoItem("Followers", 120),
-    ProfileInfoItem("Following", 200),
-  ];
+class _ProfileInfoState extends State<ProfileInfo> {
+  late List<ProfileInfoItem> items;
+  init() {
+    int posts = widget.info['Posts'].length;
+    int followers = widget.info['Followers'].length;
+    int following = widget.info['Following'].length;
+    setState(() {
+      items = [
+        ProfileInfoItem("Posts", posts),
+        ProfileInfoItem("Followers", followers),
+        ProfileInfoItem("Following", following)
+      ];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    init();
     return Container(
       height: 80,
       constraints: const BoxConstraints(maxWidth: 400),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _items
+        children: items
             .map((item) => Expanded(
                     child: Row(
                   children: [
-                    if (_items.indexOf(item) != 0) const VerticalDivider(),
+                    if (items.indexOf(item) != 0) const VerticalDivider(),
                     Expanded(child: _singleItem(context, item)),
                   ],
                 )))

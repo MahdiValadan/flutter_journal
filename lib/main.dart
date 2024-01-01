@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)),
       debugShowCheckedModeBanner: false,
       home: const AuthHandler(),
-      // home: CreateAccount(),
+      // home: CreatePost(),
     );
   }
 }

@@ -3,25 +3,27 @@ import 'home.dart';
 import 'explore.dart';
 import 'profile.dart';
 
-class Journal extends StatefulWidget {
-  const Journal({super.key});
+class Landing extends StatefulWidget {
+  
+  Landing({super.key, required this.currentPageIndex});
+  int currentPageIndex;
+
   @override
-  State<Journal> createState() => JournalState();
+  State<Landing> createState() => LandingState();
 }
 
-class JournalState extends State<Journal> {
-  int currentPageIndex = 0;
+class LandingState extends State<Landing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
-            currentPageIndex = index;
+            widget.currentPageIndex = index;
           });
         },
         indicatorColor: Colors.blue[200],
-        selectedIndex: currentPageIndex,
+        selectedIndex: widget.currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
@@ -44,7 +46,7 @@ class JournalState extends State<Journal> {
         const Home(),
         const Explore(),
         const Profile(),
-      ][currentPageIndex],
+      ][widget.currentPageIndex],
     );
   }
 }

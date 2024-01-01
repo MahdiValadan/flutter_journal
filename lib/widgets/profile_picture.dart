@@ -52,7 +52,6 @@ class ProfilePicture extends StatelessWidget {
                       }
                       // If the Future has completed successfully, use the data
                       String? pictureUrl = snapshot.data;
-                      print(pictureUrl);
                       if (pictureUrl == null) {
                         return const Icon(
                           Icons.person_outline_outlined,

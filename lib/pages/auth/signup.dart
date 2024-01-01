@@ -28,7 +28,7 @@ class _SignupCardState extends State<SignupCard> {
       showAlertDialog(context, 'Success', 'Your Account has been created.');
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const EditProfile()),
+        MaterialPageRoute(builder: (context) => const EditProfile(firstTime: true)),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

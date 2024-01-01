@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Pages
 import 'package:flutter_journal/pages/auth/auth.dart';
-import 'package:flutter_journal/pages/journal/journal.dart';
+import 'package:flutter_journal/pages/journal/landing.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 
 class AuthHandler extends StatelessWidget {
@@ -21,7 +21,7 @@ class AuthHandler extends StatelessWidget {
             return const Auth();
           } else {
             // User is signed in, navigate to the home screen
-            return const Journal();
+            return Landing(currentPageIndex: 0);
           }
         } else {
           // Loading state

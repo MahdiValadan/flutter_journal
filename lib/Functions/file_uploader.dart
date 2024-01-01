@@ -3,14 +3,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class FileUploader {
   File file;
-  String? fileName;
+  String fileName;
   FileUploader(this.file, this.fileName);
 
   Future<void> uploadFile() async {
     try {
-      String fileName = this.fileName ?? 'profilePicture';
+      String fileName = this.fileName;
       Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
-      UploadTask uploadTask = storageReference.putFile(file);
+      final metadata = SettableMetadata(contentType: 'image/jpeg');
+      UploadTask uploadTask = storageReference.putFile(file, metadata);
 
       await uploadTask.whenComplete(() => print('File uploaded'));
     } catch (e) {

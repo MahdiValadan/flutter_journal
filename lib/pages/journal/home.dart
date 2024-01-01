@@ -67,7 +67,11 @@ class SecondPage extends StatelessWidget {
                 tag: heroTag,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(_images[heroTag]),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/images/polite-chicky.gif',
+                    image: _images[heroTag],
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -85,7 +89,7 @@ class SecondPage extends StatelessWidget {
 }
 
 final List<String> _images = [
-  "https://firebasestorage.googleapis.com/v0/b/flutter-journal-ea1b4.appspot.com/o/Kitten%20(1).jpg?alt=media&token=c6cf4718-e312-49f0-8305-7c11ce66dc0c",
+  "https://picsum.photos/id/1000/960/540",
   'https://picsum.photos/id/1000/960/540',
   'https://picsum.photos/id/1000/960/540',
   'https://picsum.photos/id/1000/960/540',

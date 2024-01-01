@@ -4,8 +4,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class UserFunctions {
   String? email;
+
   final firebaseAuth = FirebaseAuth.instance;
   final firestoreDB = FirebaseFirestore.instance;
+
   init() {
     email = firebaseAuth.currentUser?.email;
   }
@@ -17,10 +19,11 @@ class UserFunctions {
 
   Future<String?> getName() async {
     final user = firestoreDB.collection("users").doc(email);
-    String name = '';
+    Map<String, dynamic> data;
+    String? name;
     await user.get().then(
       (DocumentSnapshot doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data = doc.data() as Map<String, dynamic>;
         name = data['Name'];
       },
       onError: (e) => print("Error getting document: $e"),
@@ -28,8 +31,20 @@ class UserFunctions {
     return name;
   }
 
+  Future<Map<String, dynamic>?> getInfo() async {
+    final user = firestoreDB.collection("users").doc(email);
+    Map<String, dynamic>? data;
+    await user.get().then(
+      (DocumentSnapshot doc) {
+        data = doc.data() as Map<String, dynamic>;
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+    return data;
+  }
+
   Future<String?> getPicture() async {
-    final picturePath = "gs://flutter-journal-ea1b4.appspot.com/$email.jpg";
+    final picturePath = "gs://flutter-journal-ea1b4.appspot.com/profiles/$email.jpg";
     final storageReference = FirebaseStorage.instance.refFromURL(picturePath);
     try {
       String downloadURL = await storageReference.getDownloadURL();
