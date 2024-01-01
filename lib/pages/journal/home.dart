@@ -15,8 +15,8 @@ class Home extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SecondPage(heroTag: index)));
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => SecondPage(heroTag: index)));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -85,7 +85,7 @@ class SecondPage extends StatelessWidget {
 }
 
 final List<String> _images = [
-  'https://picsum.photos/id/1000/960/540',
+  "https://firebasestorage.googleapis.com/v0/b/flutter-journal-ea1b4.appspot.com/o/Kitten%20(1).jpg?alt=media&token=c6cf4718-e312-49f0-8305-7c11ce66dc0c",
   'https://picsum.photos/id/1000/960/540',
   'https://picsum.photos/id/1000/960/540',
   'https://picsum.photos/id/1000/960/540',

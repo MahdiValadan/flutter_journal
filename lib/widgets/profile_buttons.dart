@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_journal/auth/auth.dart';
-import 'package:flutter_journal/pages/edit_profile.dart';
+import 'package:flutter_journal/pages/auth/auth.dart';
+import 'package:flutter_journal/pages/journal/edit_profile.dart';
 
 class ProfileButtons extends StatelessWidget {
   const ProfileButtons({

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 // Pages
-import 'package:flutter_journal/auth/auth.dart';
-import 'package:flutter_journal/pages/journal.dart';
+import 'package:flutter_journal/pages/auth/auth.dart';
+import 'package:flutter_journal/pages/journal/journal.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 
 class AuthHandler extends StatelessWidget {
@@ -25,7 +24,7 @@ class AuthHandler extends StatelessWidget {
             return const Journal();
           }
         } else {
-          // Loading state, show a loading indicator or splash screen
+          // Loading state
           return const Loading();
         }
       },

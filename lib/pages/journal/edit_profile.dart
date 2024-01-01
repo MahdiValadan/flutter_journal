@@ -1,11 +1,16 @@
+import 'dart:io';
+import 'dart:ui';
+import 'package:flutter/material.dart';
+// API
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_journal/pages/journal.dart';
+import 'package:flutter_journal/Functions/file_uploader.dart';
+import 'package:image_picker/image_picker.dart';
+// Widget
 import 'package:flutter_journal/widgets/alert.dart';
-import 'dart:ui';
-
 import 'package:flutter_journal/widgets/loading.dart';
+// Page
+import 'package:flutter_journal/pages/journal/journal.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -18,18 +23,46 @@ class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController name = TextEditingController();
   final TextEditingController bio = TextEditingController();
+
+  // Loading Status
   bool isLoading = false;
-  // Create Function
-  Future<void> save(name, bio, context) async {
+
+  // Profile Image
+  XFile? image;
+  File? pickedImage;
+  bool showImage = false;
+
+  Future<void> pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      image = pickedFile;
+      if (image != null) {
+        pickedImage = File(image!.path);
+        showImage = true;
+      }
+    });
+  }
+
+  // Save Function
+  Future<void> save(name, context) async {
     setState(() {
       isLoading = true;
     });
     if (FirebaseAuth.instance.currentUser != null) {
-      String? email = FirebaseAuth.instance.currentUser?.email;
       FirebaseFirestore db = FirebaseFirestore.instance;
-      final user = <String, dynamic>{"Name": name, "Bio": bio};
+      String? email = FirebaseAuth.instance.currentUser?.email;
+      final user = <String, dynamic>{"Name": name};
+      // Set New Data
       await db.collection("users").doc(email).set(user);
-      showAlertDialog(context, 'Success', 'Your Account has been Created');
+      if (pickedImage != null) {
+        FileUploader fileUploader = FileUploader(pickedImage!, '$email.jpg');
+        try {
+          await fileUploader.uploadFile();
+        } catch (e) {
+          print(e);
+        }
+      }
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Journal()),
@@ -81,6 +114,34 @@ class _EditProfileState extends State<EditProfile> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
+                            //Profile Picture
+                            InkWell(
+                              onTap: () {
+                                pickImage();
+                              },
+                              child: Container(
+                                width: 100.0,
+                                height: 100.0,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.cyan,
+                                ),
+                                child: showImage
+                                    ? ClipOval(
+                                        child: Image.file(pickedImage!, fit: BoxFit.fill),
+                                      )
+                                    : const Center(
+                                        child: Icon(
+                                          Icons.add_a_photo_outlined,
+                                          color: Colors.white,
+                                          size: 50,
+                                        ),
+                                      ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 30),
+
                             // Name
                             TextFormField(
                               decoration: const InputDecoration(labelText: 'Name'),
@@ -92,34 +153,26 @@ class _EditProfileState extends State<EditProfile> {
                                 return null; // Return null if the input is valid.
                               },
                             ),
-                            const SizedBox(height: 20),
-                            // bio
-                            TextFormField(
-                              decoration: const InputDecoration(labelText: 'bio'),
-                              controller: bio,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your bio';
-                                }
-                                return null; // Return null if the input is valid.
-                              },
-                            ),
-                            // Button Save
+
                             const SizedBox(height: 40),
+
+                            // Button Save
                             SizedBox(
                               width: double.infinity,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    save(name.text, bio.text, context);
+                                    save(name.text, context);
                                   }
                                 },
                                 child: const Text('Save'),
                               ),
                             ),
-                            // Button Cancel
+
                             const SizedBox(height: 20),
+
+                            // Button Cancel
                             SizedBox(
                               width: double.infinity,
                               height: 50,

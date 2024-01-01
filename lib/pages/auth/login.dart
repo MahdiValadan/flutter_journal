@@ -15,14 +15,15 @@ class LoginCard extends StatefulWidget {
 class _LoginCardState extends State<LoginCard> {
   // Loading Handler
   bool isLoading = false;
+
   // Login Function
   Future<void> loginToAccount(email, password, context) async {
     setState(() {
       isLoading = true;
     });
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+
       // showAlertDialog(context, 'Success', 'OK');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {

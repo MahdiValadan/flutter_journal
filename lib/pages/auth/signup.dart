@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Pages
-import 'package:flutter_journal/pages/edit_profile.dart';
+import 'package:flutter_journal/pages/journal/edit_profile.dart';
 // Widgets
 import 'package:flutter_journal/widgets/auth_form.dart';
 import 'package:flutter_journal/widgets/alert.dart';

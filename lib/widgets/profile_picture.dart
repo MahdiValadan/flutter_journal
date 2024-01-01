@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_journal/Functions/user_functions.dart';
+
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({Key? key}) : super(key: key);
+  ProfilePicture({super.key});
+  final UserFunctions userFunctions = UserFunctions();
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +31,38 @@ class ProfilePicture extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
+                  decoration: BoxDecoration(
+                    color: Colors.amber[800],
                     shape: BoxShape.circle,
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')),
+                  ),
+                  child: FutureBuilder<String?>(
+                    future: userFunctions.getPicture(),
+                    builder: (context, snapshot) {
+                      // Check if the Future is still running
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      // Check if there's an error in the Future
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      }
+                      // If the Future has completed successfully, use the data
+                      String? pictureUrl = snapshot.data;
+                      print(pictureUrl);
+                      if (pictureUrl == null) {
+                        return const Icon(
+                          Icons.person_outline_outlined,
+                          color: Colors.white,
+                          size: 80,
+                        );
+                      } else {
+                        return ClipOval(child: Image.network(pictureUrl, fit: BoxFit.fill));
+                      } // Image
+                    },
                   ),
                 ),
                 Positioned(
