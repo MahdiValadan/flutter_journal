@@ -4,26 +4,32 @@ import 'explore.dart';
 import 'profile.dart';
 
 class Landing extends StatefulWidget {
-  
-  Landing({super.key, required this.currentPageIndex});
-  int currentPageIndex;
-
+  const Landing({super.key, required this.pageIndex});
+  final int pageIndex;
   @override
   State<Landing> createState() => LandingState();
 }
 
 class LandingState extends State<Landing> {
+  int pageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    pageIndex = widget.pageIndex;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
-            widget.currentPageIndex = index;
+            pageIndex = index;
           });
         },
         indicatorColor: Colors.blue[200],
-        selectedIndex: widget.currentPageIndex,
+        selectedIndex: pageIndex,
         destinations: const <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
@@ -46,7 +52,7 @@ class LandingState extends State<Landing> {
         const Home(),
         const Explore(),
         const Profile(),
-      ][widget.currentPageIndex],
+      ][pageIndex],
     );
   }
 }

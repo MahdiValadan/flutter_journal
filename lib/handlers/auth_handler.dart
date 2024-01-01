@@ -21,7 +21,7 @@ class AuthHandler extends StatelessWidget {
             return const Auth();
           } else {
             // User is signed in, navigate to the home screen
-            return Landing(currentPageIndex: 0);
+            return const Landing(pageIndex: 0);
           }
         } else {
           // Loading state

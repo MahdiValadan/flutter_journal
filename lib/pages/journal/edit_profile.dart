@@ -70,7 +70,7 @@ class _EditProfileState extends State<EditProfile> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Landing(currentPageIndex: 2)),
+        MaterialPageRoute(builder: (context) => const Landing(pageIndex: 2)),
       );
     } else {
       showAlertDialog(context, 'Error', 'Error');
@@ -189,7 +189,7 @@ class _EditProfileState extends State<EditProfile> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Landing(currentPageIndex: 2)),
+                                        builder: (context) => const Landing(pageIndex: 2)),
                                   );
                                 },
                                 child: const Text('Cancel'),

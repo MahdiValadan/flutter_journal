@@ -80,7 +80,7 @@ class _CreatePostState extends State<CreatePost> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Landing(currentPageIndex: 2)),
+          MaterialPageRoute(builder: (context) => const Landing(pageIndex: 2)),
         );
       } catch (e) {
         showAlertDialog(context, 'Error', e.toString());
@@ -242,7 +242,7 @@ class _CreatePostState extends State<CreatePost> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Landing(currentPageIndex: 2)),
+                                        builder: (context) => const Landing(pageIndex: 2)),
                                   );
                                 },
                                 child: const Text('Cancel'),
