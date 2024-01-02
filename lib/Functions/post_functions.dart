@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_journal/Functions/user_functions.dart';
 
 class PostFunctions {
-
   // Get All the Posts From Database for Explore Page
   Future<List<Map<String, dynamic>>> getAllData(String collectionName) async {
     List<Map<String, dynamic>> data = [];
@@ -42,6 +42,33 @@ class PostFunctions {
       } else {
         return [];
       }
+    } catch (e) {
+      print('Error getting data from Firestore: $e');
+      return [];
+    }
+  }
+
+  //Get following posts
+  Future<List<Map<String, dynamic>>> getFollowingPosts() async {
+    UserFunctions userFunctions = UserFunctions();
+    String user = userFunctions.getCurrentUserEmail();
+    Map? userInfo = await userFunctions.getInfo(user);
+    List following = userInfo!['following'];
+
+    List<Map<String, dynamic>> data = [];
+
+    try {
+      for (var element in following) {
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('posts')
+            .where('Email', isEqualTo: element)
+            .get();
+        for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+          Map<String, dynamic> documentData = documentSnapshot.data() as Map<String, dynamic>;
+          data.add(documentData);
+        }
+      }
+      return data;
     } catch (e) {
       print('Error getting data from Firestore: $e');
       return [];

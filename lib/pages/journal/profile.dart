@@ -65,7 +65,9 @@ class _ProfileState extends State<Profile> {
                   // Space
                   const SizedBox(height: 30),
                   // Profile Buttons
-                  widget.isCurrentUser ? const ProfileButtons() : const ProfileButtonsAlt(),
+                  widget.isCurrentUser
+                      ? const ProfileButtons()
+                      : ProfileButtonsAlt(profileUser: widget.userEmail),
                   // Space
                   const SizedBox(height: 30),
                   // Profile Info

@@ -25,11 +25,15 @@ class ViewJournalContent extends StatelessWidget {
           ),
           const Divider(),
           Container(
-            alignment: Alignment.centerLeft,
-            child: SingleChildScrollView(
-              child: Text(
-                post['Content'],
-                style: Theme.of(context).textTheme.bodyLarge,
+            height: 270,
+            alignment: Alignment.topLeft,
+            child: Scrollbar(
+              // thumbVisibility: true,
+              child: SingleChildScrollView(
+                child: Text(
+                  post['Content'],
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             ),
           ),

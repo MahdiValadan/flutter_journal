@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
             child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: postFunctions.getAllData('posts'),
+                future: postFunctions.getFollowingPosts(),
                 builder: (context, snapshot) {
                   // Check if the Future is still running
                   if (snapshot.connectionState == ConnectionState.waiting) {

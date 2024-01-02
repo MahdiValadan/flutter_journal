@@ -86,9 +86,8 @@ class _CreateJournalState extends State<CreateJournal> {
 
         // Extract the current list from the document
         List<dynamic> newList = currentData['posts'] ?? [];
-        print('!!!!! $newList');
 
-        // Modify the list (add a new element, for example)
+        // Modify the list (add a new element)
         newList.add(documentId);
 
         // Update the entire list in Firestore
