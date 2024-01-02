@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_journal/Functions/user_functions.dart';
 import 'home.dart';
 import 'explore.dart';
 import 'profile.dart';
@@ -12,7 +13,7 @@ class Landing extends StatefulWidget {
 
 class LandingState extends State<Landing> {
   int pageIndex = 0;
-
+  UserFunctions userFunctions = UserFunctions();
   @override
   void initState() {
     super.initState();
@@ -51,7 +52,10 @@ class LandingState extends State<Landing> {
       body: <Widget>[
         const Home(),
         const Explore(),
-        const Profile(),
+        Profile(
+          isCurrentUser: true,
+          userEmail: userFunctions.getCurrentUserEmail(),
+        ),
       ][pageIndex],
     );
   }

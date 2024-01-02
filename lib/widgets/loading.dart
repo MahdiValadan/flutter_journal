@@ -13,7 +13,7 @@ class Loading extends StatelessWidget {
           constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/bg-art.jpg"),
+              image: AssetImage("assets/images/bg-pastel.jpg"),
               fit: BoxFit.cover,
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_journal/pages/journal/landing.dart';
 // Widgets
 import 'package:flutter_journal/widgets/alert.dart';
 import 'package:flutter_journal/widgets/auth_form.dart';
@@ -23,7 +24,10 @@ class _LoginCardState extends State<LoginCard> {
     });
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Landing(pageIndex: 0)),
+      );
       // showAlertDialog(context, 'Success', 'OK');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {

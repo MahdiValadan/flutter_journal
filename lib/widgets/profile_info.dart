@@ -11,16 +11,18 @@ class ProfileInfo extends StatefulWidget {
 class _ProfileInfoState extends State<ProfileInfo> {
   late List<ProfileInfoItem> items;
   init() {
-    int posts = widget.info['Posts'].length;
-    int followers = widget.info['Followers'].length;
-    int following = widget.info['Following'].length;
-    setState(() {
-      items = [
-        ProfileInfoItem("Posts", posts),
-        ProfileInfoItem("Followers", followers),
-        ProfileInfoItem("Following", following)
-      ];
-    });
+    int posts = widget.info['posts'].length;
+    int followers = widget.info['followers'].length;
+    int following = widget.info['following'].length;
+    setState(
+      () {
+        items = [
+          ProfileInfoItem("Posts", posts),
+          ProfileInfoItem("Followers", followers),
+          ProfileInfoItem("Following", following)
+        ];
+      },
+    );
   }
 
   @override

@@ -15,14 +15,14 @@ import 'package:flutter_journal/widgets/loading.dart';
 // Page
 import 'package:flutter_journal/pages/journal/landing.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+class CreateJournal extends StatefulWidget {
+  const CreateJournal({super.key});
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<CreateJournal> createState() => _CreateJournalState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _CreateJournalState extends State<CreateJournal> {
   // Controllers
   final _formKey = GlobalKey<FormState>();
   final TextEditingController title = TextEditingController();
@@ -76,7 +76,23 @@ class _CreatePostState extends State<CreatePost> {
           'Image': imageUrl
         };
 
-        await db.collection("posts").add(post);
+        DocumentReference documentReference = await db.collection('posts').add(post);
+        String documentId = documentReference.id;
+
+        // Fetch the current data from Firestore
+        DocumentSnapshot documentSnapshot = await db.collection('users').doc(email).get();
+
+        Map<String, dynamic> currentData = documentSnapshot.data() as Map<String, dynamic>;
+
+        // Extract the current list from the document
+        List<dynamic> newList = currentData['posts'] ?? [];
+        print('!!!!! $newList');
+
+        // Modify the list (add a new element, for example)
+        newList.add(documentId);
+
+        // Update the entire list in Firestore
+        await db.collection('users').doc(email).update({'posts': newList});
 
         Navigator.pushReplacement(
           context,
@@ -184,7 +200,7 @@ class _CreatePostState extends State<CreatePost> {
 
                             // Content
                             Container(
-                              constraints: BoxConstraints(maxHeight: 300),
+                              constraints: const BoxConstraints(maxHeight: 230),
                               child: TextFormField(
                                 keyboardType: TextInputType.multiline,
                                 decoration: const InputDecoration(
@@ -239,11 +255,7 @@ class _CreatePostState extends State<CreatePost> {
                                   foregroundColor: Colors.white,
                                 ),
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Landing(pageIndex: 2)),
-                                  );
+                                  Navigator.pop(context);
                                 },
                                 child: const Text('Cancel'),
                               ),

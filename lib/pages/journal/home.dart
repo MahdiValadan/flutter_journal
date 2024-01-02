@@ -1,98 +1,63 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_journal/Functions/post_functions.dart';
+import 'package:flutter_journal/widgets/journal_preview.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  PostFunctions postFunctions = PostFunctions();
+  // late List<Map<String, dynamic>> posts;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Hero ListView")),
       body: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: ListView.builder(
-            itemCount: _images.length,
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => SecondPage(heroTag: index)));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Hero(
-                        tag: index,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            _images[index],
-                            width: 200,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                          child: Text(
-                        'Title: $index',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      )),
-                    ],
-                  ),
-                ),
-              );
-            },
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/bg-pastel.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          margin: const EdgeInsets.only(top: 40),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: postFunctions.getAllData('posts'),
+                builder: (context, snapshot) {
+                  // Check if the Future is still running
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  // Check if there's an error in the Future
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  }
+                  // If the Future has completed successfully, use the data
+                  List<Map<String, dynamic>> posts = snapshot.data ?? [];
+
+                  return ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final post = posts[index];
+                      return JournalPreview(post: post);
+                    },
+                  );
+                }),
           ),
         ),
       ),
     );
   }
 }
-
-class SecondPage extends StatelessWidget {
-  final int heroTag;
-
-  const SecondPage({Key? key, required this.heroTag}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Hero ListView Page 2")),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Hero(
-                tag: heroTag,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/polite-chicky.gif',
-                    image: _images[heroTag],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              "Content goes here",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-final List<String> _images = [
-  "https://picsum.photos/id/1000/960/540",
-  'https://picsum.photos/id/1000/960/540',
-  'https://picsum.photos/id/1000/960/540',
-  'https://picsum.photos/id/1000/960/540',
-  'https://picsum.photos/id/1000/960/540',
-  'https://picsum.photos/id/1000/960/540'
-];

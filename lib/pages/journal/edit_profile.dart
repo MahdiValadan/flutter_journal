@@ -51,14 +51,15 @@ class _EditProfileState extends State<EditProfile> {
     if (FirebaseAuth.instance.currentUser != null) {
       FirebaseFirestore db = FirebaseFirestore.instance;
       String? email = FirebaseAuth.instance.currentUser?.email;
-      var user = <String, dynamic>{};
+
       if (widget.firstTime) {
-        user = <String, dynamic>{"Name": name, 'Followers': [], 'Following': [], 'Posts': []};
+        // Set New Data
+        Map<String, dynamic> user = {"name": name, 'followers': [], 'following': [], 'posts': []};
+        await db.collection("users").doc(email).set(user);
       } else {
-        user = <String, dynamic>{"Name": name};
+        // update name
+        await db.collection("users").doc(email).update({"name": name});
       }
-      // Set New Data
-      await db.collection("users").doc(email).set(user);
       if (pickedImage != null) {
         FileUploader fileUploader = FileUploader(pickedImage!, 'profiles/$email.jpg');
         try {
@@ -133,7 +134,10 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                                 child: showImage
                                     ? ClipOval(
-                                        child: Image.file(pickedImage!, fit: BoxFit.fill),
+                                        child: Image.file(
+                                          pickedImage!,
+                                          fit: BoxFit.cover,
+                                        ),
                                       )
                                     : const Center(
                                         child: Icon(
@@ -186,11 +190,7 @@ class _EditProfileState extends State<EditProfile> {
                                     backgroundColor: Colors.pink[300],
                                     foregroundColor: Colors.white),
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Landing(pageIndex: 2)),
-                                  );
+                                  Navigator.pop(context);
                                 },
                                 child: const Text('Cancel'),
                               ),

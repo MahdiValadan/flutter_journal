@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
 
 class ProfilePicture extends StatelessWidget {
-  ProfilePicture({super.key});
+  ProfilePicture({super.key, required this.email});
+  final String email;
   final UserFunctions userFunctions = UserFunctions();
 
   @override
@@ -13,14 +14,16 @@ class ProfilePicture extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(bottom: 50),
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [Colors.lightBlue, Colors.cyan]),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50),
-              )),
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [Colors.lightBlue, Colors.cyan],
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(50),
+            ),
+          ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -36,7 +39,7 @@ class ProfilePicture extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: FutureBuilder<String?>(
-                    future: userFunctions.getPicture(),
+                    future: userFunctions.getPicture(email),
                     builder: (context, snapshot) {
                       // Check if the Future is still running
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,11 +62,20 @@ class ProfilePicture extends StatelessWidget {
                           size: 80,
                         );
                       } else {
-                        return ClipOval(child: Image.network(pictureUrl, fit: BoxFit.fill));
+                        // ### IMAGE ###
+                        return ClipOval(
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/images/polite-chicky.gif',
+                            image: pictureUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        );
                       } // Image
                     },
                   ),
                 ),
+
+                // ### Green Circle Indicator ###
                 Positioned(
                   bottom: 0,
                   right: 0,

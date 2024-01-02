@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class UserFunctions {
-  String? email;
+  late String currentUserEmail;
 
   final firebaseAuth = FirebaseAuth.instance;
   final firestoreDB = FirebaseFirestore.instance;
 
   init() {
-    email = firebaseAuth.currentUser?.email;
+    currentUserEmail = firebaseAuth.currentUser?.email ?? '';
   }
 
   // Constructor
@@ -17,21 +17,27 @@ class UserFunctions {
     init();
   }
 
-  Future<String?> getName() async {
+  String getCurrentUserEmail() {
+    return currentUserEmail;
+  }
+
+  // Get Name of a user
+  Future<String?> getName(String email) async {
     final user = firestoreDB.collection("users").doc(email);
     Map<String, dynamic> data;
     String? name;
     await user.get().then(
       (DocumentSnapshot doc) {
         data = doc.data() as Map<String, dynamic>;
-        name = data['Name'];
+        name = data['name'];
       },
       onError: (e) => print("Error getting document: $e"),
     );
     return name;
   }
 
-  Future<Map<String, dynamic>?> getInfo() async {
+  // get info of a user
+  Future<Map<String, dynamic>?> getInfo(String email) async {
     final user = firestoreDB.collection("users").doc(email);
     Map<String, dynamic>? data;
     await user.get().then(
@@ -43,7 +49,8 @@ class UserFunctions {
     return data;
   }
 
-  Future<String?> getPicture() async {
+  //get picture of a user
+  Future<String?> getPicture(String email) async {
     final picturePath = "gs://flutter-journal-ea1b4.appspot.com/profiles/$email.jpg";
     final storageReference = FirebaseStorage.instance.refFromURL(picturePath);
     try {
