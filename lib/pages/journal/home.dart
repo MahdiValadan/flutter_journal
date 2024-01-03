@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/post_functions.dart';
 import 'package:flutter_journal/widgets/journal_preview.dart';
+import 'package:lottie/lottie.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,7 +13,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   PostFunctions postFunctions = PostFunctions();
-  // late List<Map<String, dynamic>> posts;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +47,18 @@ class _HomeState extends State<Home> {
                   // If the Future has completed successfully, use the data
                   List<Map<String, dynamic>> posts = snapshot.data ?? [];
 
+                  if (posts.isEmpty) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Follow others to see their posts 🐻',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Lottie.asset('assets/lottie/skate.json', width: 300, height: 300),
+                      ],
+                    );
+                  }
                   return ListView.builder(
                     itemCount: posts.length,
                     itemBuilder: (BuildContext context, int index) {

@@ -32,8 +32,9 @@ class _EditProfileState extends State<EditProfile> {
   File? pickedImage;
   bool showImage = false;
 
-  Future<void> pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+// *** Pick Image Function
+  Future<void> pickImage(ImageSource imageSource) async {
+    final pickedFile = await ImagePicker().pickImage(source: imageSource);
     setState(() {
       image = pickedFile;
       if (image != null) {
@@ -43,7 +44,7 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  // Save Function
+  // *** Save Function
   Future<void> save(name, context) async {
     setState(() {
       isLoading = true;
@@ -79,6 +80,34 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  // *** Show Pick Image Buttons Functions
+  pickeImageBottons() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo),
+                title: const Text('Gallery'),
+                onTap: () {
+                  pickImage(ImageSource.gallery);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  pickImage(ImageSource.camera);
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -123,7 +152,7 @@ class _EditProfileState extends State<EditProfile> {
                             //Profile Picture
                             InkWell(
                               onTap: () {
-                                pickImage();
+                                pickeImageBottons();
                               },
                               child: Container(
                                 width: 100.0,
