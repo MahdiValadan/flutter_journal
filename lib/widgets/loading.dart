@@ -13,15 +13,15 @@ class Loading extends StatelessWidget {
           constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/bg-pastel.jpg"),
+              image: AssetImage("assets/images/bg-white.jpg"),
               fit: BoxFit.cover,
             ),
           ),
           child: ClipRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(
-                sigmaX: 50.0,
-                sigmaY: 50.0,
+                sigmaX: 20.0,
+                sigmaY: 20.0,
               ),
               child: Container(
                 constraints: const BoxConstraints.expand(),

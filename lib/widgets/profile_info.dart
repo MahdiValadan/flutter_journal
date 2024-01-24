@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/models/profile_info_item.dart';
+import 'package:flutter_journal/pages/journal/view_follow_list.dart';
+import 'package:flutter_journal/pages/journal/view_journal_list.dart';
 
 class ProfileInfo extends StatefulWidget {
-  const ProfileInfo({super.key, required this.info});
+  const ProfileInfo(
+      {super.key, required this.info, required this.userEmail, required this.isCurrentUser});
   final Map<String, dynamic> info;
+  final String userEmail;
+  final bool isCurrentUser;
   @override
   State<ProfileInfo> createState() => _ProfileInfoState();
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
   late List<ProfileInfoItem> items;
+  late List followers;
+  late List following;
+  late List posts;
   init() {
-    int posts = widget.info['posts'].length;
-    int followers = widget.info['followers'].length;
-    int following = widget.info['following'].length;
+    posts = widget.info['posts'];
+    followers = widget.info['followers'];
+    following = widget.info['following'];
     setState(
       () {
         items = [
-          ProfileInfoItem("Posts", posts),
-          ProfileInfoItem("Followers", followers),
-          ProfileInfoItem("Following", following)
+          ProfileInfoItem("Posts", posts.length),
+          ProfileInfoItem("Followers", followers.length),
+          ProfileInfoItem("Following", following.length)
         ];
       },
     );
@@ -34,13 +42,16 @@ class _ProfileInfoState extends State<ProfileInfo> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: items
-            .map((item) => Expanded(
-                    child: Row(
+            .map(
+              (item) => Expanded(
+                child: Row(
                   children: [
                     if (items.indexOf(item) != 0) const VerticalDivider(),
                     Expanded(child: _singleItem(context, item)),
                   ],
-                )))
+                ),
+              ),
+            )
             .toList(),
       ),
     );
@@ -49,13 +60,51 @@ class _ProfileInfoState extends State<ProfileInfo> {
   Widget _singleItem(BuildContext context, ProfileInfoItem item) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              item.value.toString(),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+          TextButton(
+            onPressed: () => {
+              if (item.title == 'Followers' && widget.isCurrentUser)
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewFollowList(
+                        followList: followers,
+                        title: 'Followers',
+                      ),
+                    ),
+                  )
+                }
+              else if (item.title == 'Following' && widget.isCurrentUser)
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewFollowList(
+                        followList: following,
+                        title: 'Following',
+                      ),
+                    ),
+                  )
+                }
+              else if (item.title == 'Posts')
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewJournalList(userEmail: widget.userEmail),
+                    ),
+                  )
+                }
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.black),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                item.value.toString(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
             ),
           ),

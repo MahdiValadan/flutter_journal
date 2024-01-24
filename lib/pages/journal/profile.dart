@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_journal/Functions/post_functions.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
-import 'package:flutter_journal/widgets/journal_preview.dart';
 import 'package:flutter_journal/widgets/profile_buttons.dart';
 import 'package:flutter_journal/widgets/profile_buttons_alt.dart';
 import 'package:flutter_journal/widgets/profile_info.dart';
@@ -19,7 +17,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final UserFunctions userFunctions = UserFunctions();
-  final PostFunctions postFunctions = PostFunctions();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,14 +30,14 @@ class _ProfileState extends State<Profile> {
 
           // Profile name & buttons & info
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
                   // Space
-                  const SizedBox(height: 20),
-                  // Profile Name
+                  const SizedBox(height: 30),
+                  // Profile Name \\
                   FutureBuilder<String?>(
                     future: userFunctions.getName(widget.userEmail),
                     builder: (context, snapshot) {
@@ -69,8 +66,8 @@ class _ProfileState extends State<Profile> {
                       ? const ProfileButtons()
                       : ProfileButtonsAlt(profileUser: widget.userEmail),
                   // Space
-                  const SizedBox(height: 30),
-                  // Profile Info
+                  const SizedBox(height: 50),
+                  // Profile Info \\
                   FutureBuilder<Map<String, dynamic>?>(
                     future: userFunctions.getInfo(widget.userEmail),
                     builder: (context, snapshot) {
@@ -88,45 +85,19 @@ class _ProfileState extends State<Profile> {
                       }
                       // If the Future has completed successfully, use the data
                       Map<String, dynamic>? data = snapshot.data ?? {};
-                      // Build your UI using the result
-                      return ProfileInfo(info: data);
+
+                      // PROFILE INFO
+                      return ProfileInfo(
+                        info: data,
+                        userEmail: widget.userEmail,
+                        isCurrentUser: widget.isCurrentUser,
+                      );
                     },
                   )
                 ],
               ),
             ),
           ),
-
-          // Current user's posts
-          Expanded(
-            flex: 2,
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: postFunctions.getDataOfUser(widget.userEmail),
-                builder: (context, snapshot) {
-                  // Check if the Future is still running
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  // Check if there's an error in the Future
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  }
-                  // If the Future has completed successfully, use the data
-                  List<Map<String, dynamic>> posts = snapshot.data ?? [];
-
-                  return ListView.builder(
-                    itemCount: posts.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final post = posts[index];
-                      return JournalPreview(post: post);
-                    },
-                  );
-                }),
-          )
         ],
       ),
     );

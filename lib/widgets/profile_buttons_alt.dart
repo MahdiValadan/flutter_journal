@@ -43,7 +43,7 @@ class ProfileButtonsAlt extends StatelessWidget {
     Map<String, dynamic>? profileUserInfo = await userFunctions.getInfo(profileUser);
 
     List<dynamic> currentUserFollowing = currentUserInfo?['following'];
-    List<dynamic> profileUserFollowers = profileUserInfo?['following'];
+    List<dynamic> profileUserFollowers = profileUserInfo?['followers'];
 
     currentUserFollowing.remove(profileUser);
     profileUserFollowers.remove(currentUser);
@@ -103,14 +103,14 @@ class ProfileButtonsAlt extends StatelessWidget {
           },
         ),
         const SizedBox(width: 20.0),
-        const LogoutButton()
+        const CloseButton()
       ],
     );
   }
 }
 
-class LogoutButton extends StatelessWidget {
-  const LogoutButton({
+class CloseButton extends StatelessWidget {
+  const CloseButton({
     super.key,
   });
 
@@ -120,7 +120,7 @@ class LogoutButton extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      heroTag: 'logout',
+      heroTag: 'close',
       elevation: 0,
       backgroundColor: Colors.pink[100],
       label: const Text("Close"),

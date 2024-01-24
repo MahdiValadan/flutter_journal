@@ -57,8 +57,9 @@ class ViewJournalUserInfo extends StatelessWidget {
                     );
                   } else {
                     // ### IMAGE ###
-                    return Image.network(
-                      pictureUrl,
+                    return FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/polite-chicky.gif',
+                      image: pictureUrl,
                       fit: BoxFit.cover,
                     );
                   } // Image
