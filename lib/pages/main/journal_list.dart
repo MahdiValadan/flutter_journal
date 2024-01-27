@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/post_functions.dart';
 import 'package:flutter_journal/widgets/journal_preview.dart';
 
-class ViewJournalList extends StatelessWidget {
-  ViewJournalList({super.key, required this.userEmail});
+class JournalList extends StatelessWidget {
+  JournalList({super.key, required this.userEmail});
   final String userEmail;
   final PostFunctions postFunctions = PostFunctions();
 
@@ -16,13 +16,14 @@ class ViewJournalList extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 30),
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/bg-white.jpg"),
-            fit: BoxFit.cover,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blueGrey, Colors.white],
           ),
         ),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
           child: FutureBuilder<List<Map<String, dynamic>>>(
               future: postFunctions.getDataOfUser(userEmail),
               builder: (context, snapshot) {

@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_journal/widgets/alert.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 // Page
-import 'package:flutter_journal/pages/journal/landing.dart';
+import 'package:flutter_journal/pages/main/landing.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.firstTime});

@@ -13,7 +13,7 @@ import 'package:flutter_journal/widgets/alert.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 
 // Page
-import 'package:flutter_journal/pages/journal/landing.dart';
+import 'package:flutter_journal/pages/main/landing.dart';
 
 class CreateJournal extends StatefulWidget {
   const CreateJournal({super.key});

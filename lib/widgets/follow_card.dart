@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
-import 'package:flutter_journal/pages/journal/landing.dart';
-import 'package:flutter_journal/pages/journal/profile.dart';
+import 'package:flutter_journal/pages/main/landing.dart';
+import 'package:flutter_journal/pages/main/profile.dart';
 
 class ViewFollowCard extends StatelessWidget {
   ViewFollowCard({

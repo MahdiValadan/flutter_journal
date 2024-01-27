@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_journal/widgets/view_follow_card.dart';
+import 'package:flutter_journal/widgets/follow_card.dart';
 
-class ViewFollowList extends StatelessWidget {
-  const ViewFollowList({super.key, required this.followList, required this.title});
+class FollowList extends StatelessWidget {
+  const FollowList({super.key, required this.followList, required this.title});
 
   final List followList;
   final String title;

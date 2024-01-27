@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/models/profile_info_item.dart';
-import 'package:flutter_journal/pages/journal/view_follow_list.dart';
-import 'package:flutter_journal/pages/journal/view_journal_list.dart';
+import 'package:flutter_journal/pages/main/follow_list.dart';
+import 'package:flutter_journal/pages/main/journal_list.dart';
 
 class ProfileInfo extends StatefulWidget {
   const ProfileInfo(
@@ -67,7 +67,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ViewFollowList(
+                      builder: (context) => FollowList(
                         followList: followers,
                         title: 'Followers',
                       ),
@@ -79,7 +79,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ViewFollowList(
+                      builder: (context) => FollowList(
                         followList: following,
                         title: 'Following',
                       ),
@@ -91,7 +91,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ViewJournalList(userEmail: widget.userEmail),
+                      builder: (context) => JournalList(userEmail: widget.userEmail),
                     ),
                   )
                 }

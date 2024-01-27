@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class ViewJournalImage extends StatelessWidget {
-  const ViewJournalImage({
+class JournalImage extends StatelessWidget {
+  const JournalImage({
     super.key,
     required this.post,
   });

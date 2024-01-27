@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ViewJournalContent extends StatelessWidget {
-  const ViewJournalContent({
+class JournalContent extends StatelessWidget {
+  const JournalContent({
     super.key,
     required this.post,
   });

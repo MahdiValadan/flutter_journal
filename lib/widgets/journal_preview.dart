@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_journal/pages/journal/view_journal.dart';
+import 'package:flutter_journal/pages/main/journal.dart';
 
 class JournalPreview extends StatelessWidget {
   const JournalPreview({
@@ -22,9 +22,16 @@ class JournalPreview extends StatelessWidget {
         height: 120,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.8),
-          border: Border.all(color: Colors.black, width: 2),
+          color: Colors.white.withOpacity(1),
+          border: Border.all(color: Colors.grey, width: 1),
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         padding: const EdgeInsets.all(10),
         child: Row(

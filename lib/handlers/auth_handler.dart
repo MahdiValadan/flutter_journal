@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Pages
 import 'package:flutter_journal/pages/auth/auth.dart';
-import 'package:flutter_journal/pages/journal/landing.dart';
+import 'package:flutter_journal/pages/main/landing.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 
 class AuthHandler extends StatelessWidget {

@@ -28,7 +28,7 @@ class _ExploreState extends State<Explore> {
           ),
           margin: const EdgeInsets.only(top: 40),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+            filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
             child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: postFunctions.getAllData('posts'),
                 builder: (context, snapshot) {
