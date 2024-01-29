@@ -245,38 +245,95 @@ class _EditProfileState extends State<EditProfile> {
                                 },
                               ),
 
-                              const SizedBox(height: 40),
+                              // const SizedBox(height: 40),
 
-                              // Button Save
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      save(name.text, context);
-                                    }
-                                  },
-                                  child: const Text('Save'),
-                                ),
-                              ),
+                              // // Button Save
+                              // SizedBox(
+                              //   width: double.infinity,
+                              //   height: 50,
+                              //   child: ElevatedButton(
+                              //     onPressed: () {
+                              //       if (_formKey.currentState!.validate()) {
+                              //         save(name.text, context);
+                              //       }
+                              //     },
+                              //     child: const Text('Save'),
+                              //   ),
+                              // ),
 
                               const SizedBox(height: 20),
 
                               // Button Cancel
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.pink[300],
-                                      foregroundColor: Colors.white),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                              ),
+                              // SizedBox(
+                              //   width: double.infinity,
+                              //   height: 50,
+                              //   child: ElevatedButton(
+                              //     style: ElevatedButton.styleFrom(
+                              //         backgroundColor: Colors.pink[300],
+                              //         foregroundColor: Colors.white),
+                              //     onPressed: () {
+                              //       Navigator.pop(context);
+                              //     },
+                              //     child: const Text('Cancel'),
+                              //   ),
+                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  RawMaterialButton(
+                                    fillColor:
+                                        Color.fromARGB(255, 244, 244, 244),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: scnheight / 250,
+                                      // horizontal: scnwidth /
+                                    ),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    elevation: 10,
+                                    splashColor: Colors.red[700],
+                                    child: const Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  Spacer(),
+                                  RawMaterialButton(
+                                    fillColor:
+                                        Color.fromARGB(255, 255, 255, 255),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: scnheight / 250,
+                                      // horizontal: scnwidth /
+                                    ),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    elevation: 10,
+                                    splashColor:
+                                        Color.fromARGB(255, 179, 205, 145),
+                                    child: const Text(
+                                      "Save",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        save(name.text, context);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
