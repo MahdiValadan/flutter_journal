@@ -11,6 +11,7 @@ import 'package:flutter_journal/widgets/alert.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 // Page
 import 'package:flutter_journal/pages/main/landing.dart';
+import 'package:lottie/lottie.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.firstTime});
@@ -55,14 +56,20 @@ class _EditProfileState extends State<EditProfile> {
 
       if (widget.firstTime) {
         // Set New Data
-        Map<String, dynamic> user = {"name": name, 'followers': [], 'following': [], 'posts': []};
+        Map<String, dynamic> user = {
+          "name": name,
+          'followers': [],
+          'following': [],
+          'posts': []
+        };
         await db.collection("users").doc(email).set(user);
       } else {
         // update name
         await db.collection("users").doc(email).update({"name": name});
       }
       if (pickedImage != null) {
-        FileUploader fileUploader = FileUploader(pickedImage!, 'profiles/$email.jpg');
+        FileUploader fileUploader =
+            FileUploader(pickedImage!, 'profiles/$email.jpg');
         try {
           await fileUploader.uploadFile();
         } catch (e) {
@@ -112,14 +119,18 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final scnheight = MediaQuery.of(context).size.height;
+    final scnwidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Flutter Journal')),
-        automaticallyImplyLeading: false,
-      ),
+      // appBar: AppBar(
+      //   title: const Center(child: Text('Flutter Journal')),
+      //   backgroundColor: Colors.transparent,
+      //   automaticallyImplyLeading: false,
+      // ),
       body: isLoading
           ? const Loading()
           : Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
               height: double.infinity,
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -127,108 +138,151 @@ class _EditProfileState extends State<EditProfile> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Card(
-                elevation: 0,
-                margin: const EdgeInsets.all(20.0),
-                color: Colors.white.withOpacity(0.4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: const BorderSide(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
-                  ),
-                ),
-                // Frosted Glass
-                child: ClipRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            //Profile Picture
-                            InkWell(
-                              onTap: () {
-                                pickeImageBottons();
-                              },
-                              child: Container(
-                                width: 100.0,
-                                height: 100.0,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.cyan,
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: ListView(
+                  children: [
+                    // const Text(
+                    //   "Welcome",
+                    //   style: TextStyle(
+                    //     fontSize: 24,
+                    //     fontWeight: FontWeight.bold,
+                    //     color: Colors.black, // Set text color to grey
+                    //     // shadows: [
+                    //     //   Shadow(
+                    //     //     color: Color.fromARGB(51, 72, 84, 93),
+                    //     //     offset: Offset(2.0, 2.0), // Set shadow offset
+                    //     //     blurRadius: 3.0, // Set shadow blur radius
+                    //     //   ),
+                    //     // ],
+                    //   ),
+                    // ),
+                    Lottie.asset(
+                      'assets/lottie/skate.json',
+                      height: scnheight / 5,
+                      width: scnwidth / 2,
+                    ),
+                    Card(
+                      elevation: 0,
+                      // margin: const EdgeInsets.all(10.0),
+                      color: Colors.white.withOpacity(0.4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        side: const BorderSide(
+                          color: Colors.black, // Border color
+                          width: 1.0, // Border width
+                        ),
+                      ),
+                      // Frosted Glass
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 30),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              const Text(
+                                "Profile",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black, // Set text color to grey
+                                  shadows: [
+                                    Shadow(
+                                      color: Color.fromARGB(51, 72, 84, 93),
+                                      offset:
+                                          Offset(2.0, 2.0), // Set shadow offset
+                                      blurRadius: 3.0, // Set shadow blur radius
+                                    ),
+                                  ],
                                 ),
-                                child: showImage
-                                    ? ClipOval(
-                                        child: Image.file(
-                                          pickedImage!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : const Center(
-                                        child: Icon(
-                                          Icons.add_a_photo_outlined,
-                                          color: Colors.white,
-                                          size: 50,
-                                        ),
-                                      ),
                               ),
-                            ),
+                              SizedBox(
+                                height: scnheight / 25,
+                              ),
+                              //Profile Picture
+                              InkWell(
+                                onTap: () {
+                                  pickeImageBottons();
+                                },
+                                child: Container(
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.cyan,
+                                  ),
+                                  child: showImage
+                                      ? ClipOval(
+                                          child: Image.file(
+                                            pickedImage!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : const Center(
+                                          child: Icon(
+                                            Icons.add_a_photo_outlined,
+                                            color: Colors.white,
+                                            size: 50,
+                                          ),
+                                        ),
+                                ),
+                              ),
 
-                            const SizedBox(height: 30),
+                              const SizedBox(height: 30),
 
-                            // Name
-                            TextFormField(
-                              decoration: const InputDecoration(labelText: 'Name'),
-                              controller: name,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your name';
-                                }
-                                return null; // Return null if the input is valid.
-                              },
-                            ),
-
-                            const SizedBox(height: 40),
-
-                            // Button Save
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    save(name.text, context);
+                              // Name
+                              TextFormField(
+                                decoration:
+                                    const InputDecoration(labelText: 'Name'),
+                                controller: name,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your name';
                                   }
+                                  return null; // Return null if the input is valid.
                                 },
-                                child: const Text('Save'),
                               ),
-                            ),
 
-                            const SizedBox(height: 20),
+                              const SizedBox(height: 40),
 
-                            // Button Cancel
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.pink[300],
-                                    foregroundColor: Colors.white),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
+                              // Button Save
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      save(name.text, context);
+                                    }
+                                  },
+                                  child: const Text('Save'),
+                                ),
                               ),
-                            ),
-                          ],
+
+                              const SizedBox(height: 20),
+
+                              // Button Cancel
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.pink[300],
+                                      foregroundColor: Colors.white),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),

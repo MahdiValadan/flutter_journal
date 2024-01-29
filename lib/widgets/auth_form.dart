@@ -21,30 +21,51 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   //
+
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      margin: const EdgeInsets.all(30.0),
-      color: Colors.blueGrey.withOpacity(0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-        side: const BorderSide(
-          color: Colors.blueGrey, // Border color
-          width: 1.0, // Border width
+  Widget build(context) {
+    final scnHeight = MediaQuery.of(context).size.height;
+    final scnWidth = MediaQuery.of(context).size.width;
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 0,
+        margin: EdgeInsets.all(scnWidth / 10),
+        color: Colors.blueGrey.withOpacity(0.1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+          side: const BorderSide(
+            color: Colors.blueGrey, // Border color
+            width: 1.0, // Border width
+          ),
         ),
-      ),
-      // Frosted Glass
-      child: ClipRect(
+        // Frosted Glass
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+          child: Container(
+            height: scnHeight / 2.5,
+            width: scnWidth,
+            padding: EdgeInsets.symmetric(
+                horizontal: scnWidth / 22, vertical: scnHeight / 22),
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  Text(
+                    widget.operation,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey, // Set text color to grey
+                      shadows: [
+                        Shadow(
+                          color: Color.fromARGB(51, 72, 84, 93),
+                          offset: Offset(2.0, 2.0), // Set shadow offset
+                          blurRadius: 3.0, // Set shadow blur radius
+                        ),
+                      ],
+                    ),
+                  ),
                   // Email
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
@@ -53,14 +74,15 @@ class _AuthFormState extends State<AuthForm> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
-                      } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                      } else if (!RegExp(
+                              r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
                           .hasMatch(value)) {
                         return 'Please enter a valid email address';
                       }
                       return null; // Return null if the input is valid.
                     },
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: scnHeight / 100),
                   // Passworld
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Password'),
@@ -73,14 +95,15 @@ class _AuthFormState extends State<AuthForm> {
                       return null; // Return null if the input is valid.
                     },
                   ),
-                  const SizedBox(height: 44),
+                  SizedBox(height: scnHeight / 20),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    height: scnHeight / 15,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          widget.submit(email.text, password.text, widget.context);
+                          widget.submit(
+                              email.text, password.text, widget.context);
                           // loginToAccount(email, password, context);
                         }
                       },

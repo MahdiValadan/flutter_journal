@@ -28,13 +28,15 @@ class _SignupCardState extends State<SignupCard> {
       showAlertDialog(context, 'Success', 'Your Account has been created.');
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const EditProfile(firstTime: true)),
+        MaterialPageRoute(
+            builder: (context) => const EditProfile(firstTime: true)),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showAlertDialog(context, 'Error', 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        showAlertDialog(context, 'Error', 'The account already exists for that email.');
+        showAlertDialog(
+            context, 'Error', 'The account already exists for that email.');
       } else {
         showAlertDialog(context, 'Error', e.message);
       }
