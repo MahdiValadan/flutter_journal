@@ -118,155 +118,169 @@ class _CreateJournalState extends State<CreateJournal> {
       ),
       body: isLoading
           ? const Loading()
-          : Container(
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/bg-pastel.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Card(
-                elevation: 0,
-                margin: const EdgeInsets.all(10.0),
-                color: Colors.white.withOpacity(0.4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: const BorderSide(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
+          : Builder(builder: (context) {
+              MediaQueryData mediaQuery = MediaQuery.of(context);
+              var screenWidth = mediaQuery.size.width;
+              double m;
+              double imageH;
+              if (screenWidth > 600) {
+                m = 40;
+                imageH = 300;
+              } else {
+                m = 10;
+                imageH = 200;
+              }
+              return Container(
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.blue, Colors.white],
                   ),
                 ),
-                // Frosted Glass
-                child: ClipRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            //Post Picture
-                            InkWell(
-                              onTap: () {
-                                pickImage();
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 200.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.cyan,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: showImage
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.file(pickedImage, fit: BoxFit.fill),
-                                      )
-                                    : const Center(
-                                        child: Icon(
-                                          Icons.add_photo_alternate_outlined,
-                                          color: Colors.white,
-                                          size: 60,
+                child: Card(
+                  elevation: 0,
+                  margin: EdgeInsets.all(m),
+                  color: Colors.white.withOpacity(0.4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: const BorderSide(
+                      color: Colors.black, // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  // Frosted Glass
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              //Post Picture
+                              InkWell(
+                                onTap: () {
+                                  pickImage();
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: imageH,
+                                  decoration: BoxDecoration(
+                                    color: Colors.cyan,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: showImage
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image.file(pickedImage, fit: BoxFit.fill),
+                                        )
+                                      : const Center(
+                                          child: Icon(
+                                            Icons.add_photo_alternate_outlined,
+                                            color: Colors.white,
+                                            size: 60,
+                                          ),
                                         ),
-                                      ),
+                                ),
                               ),
-                            ),
 
-                            //Space
-                            const SizedBox(height: 30),
+                              //Space
+                              const SizedBox(height: 30),
 
-                            // Title
-                            TextFormField(
-                              keyboardType: TextInputType.multiline,
-                              decoration: const InputDecoration(
-                                labelText: 'Title',
-                                // border: OutlineInputBorder(),
-                              ),
-                              controller: title,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your journal title';
-                                }
-                                return null; // Return null if the input is valid.
-                              },
-                            ),
-
-                            // Space
-                            const SizedBox(height: 20),
-
-                            // Content
-                            Container(
-                              constraints: const BoxConstraints(maxHeight: 230),
-                              child: TextFormField(
+                              // Title
+                              TextFormField(
                                 keyboardType: TextInputType.multiline,
                                 decoration: const InputDecoration(
-                                  labelText: 'Content',
-                                  hintText: 'This is My Journay!! 🦊',
-                                  border: OutlineInputBorder(),
+                                  labelText: 'Title',
+                                  // border: OutlineInputBorder(),
                                 ),
-                                controller: content,
-                                maxLines: null,
+                                controller: title,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please write your journal';
+                                    return 'Please enter your journal title';
                                   }
                                   return null; // Return null if the input is valid.
                                 },
                               ),
-                            ),
 
-                            const Expanded(child: SizedBox()),
+                              // Space
+                              const SizedBox(height: 20),
 
-                            // Button Save
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green[400],
-                                  foregroundColor: Colors.white,
+                              // Content
+                              Container(
+                                constraints: const BoxConstraints(maxHeight: 230),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.multiline,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Content',
+                                    hintText: 'This is My Journay!! 🦊',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  controller: content,
+                                  maxLines: null,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please write your journal';
+                                    }
+                                    return null; // Return null if the input is valid.
+                                  },
                                 ),
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate() && showImage) {
-                                    save(content.text, context);
-                                  } else {
-                                    showAlertDialog(context, 'Error',
-                                        'Please Choose Image and Enter both title and content');
-                                  }
-                                },
-                                child: const Text('Save'),
                               ),
-                            ),
 
-                            // Space
-                            const SizedBox(height: 20),
+                              const Expanded(child: SizedBox()),
 
-                            // Button Cancel
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.pink[400],
-                                  foregroundColor: Colors.white,
+                              // Button Save
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green[400],
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate() && showImage) {
+                                      save(content.text, context);
+                                    } else {
+                                      showAlertDialog(context, 'Error',
+                                          'Please Choose Image and Enter both title and content');
+                                    }
+                                  },
+                                  child: const Text('Save'),
                                 ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
                               ),
-                            ),
-                          ],
+
+                              // Space
+                              const SizedBox(height: 20),
+
+                              // Button Cancel
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.pink[400],
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
     );
   }
 }
