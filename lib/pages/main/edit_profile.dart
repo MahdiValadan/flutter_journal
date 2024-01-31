@@ -119,119 +119,130 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: isLoading
           ? const Loading()
-          : Container(
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/bg-pastel.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Card(
-                elevation: 0,
-                margin: const EdgeInsets.all(20.0),
-                color: Colors.white.withOpacity(0.4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: const BorderSide(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
+          : Builder(builder: (context) {
+              MediaQueryData mediaQuery = MediaQuery.of(context);
+              var screenWidth = mediaQuery.size.width;
+              double m;
+              if (screenWidth > 600) {
+                m = 40;
+              } else {
+                m = 20;
+              }
+              return Container(
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.blue, Colors.white],
                   ),
                 ),
-                // Frosted Glass
-                child: ClipRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            //Profile Picture
-                            InkWell(
-                              onTap: () {
-                                pickeImageBottons();
-                              },
-                              child: Container(
-                                width: 100.0,
-                                height: 100.0,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.cyan,
+                child: Card(
+                  elevation: 0,
+                  margin: EdgeInsets.all(m),
+                  color: Colors.white.withOpacity(0.4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: const BorderSide(
+                      color: Colors.black, // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  // Frosted Glass
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              //Profile Picture
+                              InkWell(
+                                onTap: () {
+                                  pickeImageBottons();
+                                },
+                                child: Container(
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.cyan,
+                                  ),
+                                  child: showImage
+                                      ? ClipOval(
+                                          child: Image.file(
+                                            pickedImage!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : const Center(
+                                          child: Icon(
+                                            Icons.add_a_photo_outlined,
+                                            color: Colors.white,
+                                            size: 50,
+                                          ),
+                                        ),
                                 ),
-                                child: showImage
-                                    ? ClipOval(
-                                        child: Image.file(
-                                          pickedImage!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : const Center(
-                                        child: Icon(
-                                          Icons.add_a_photo_outlined,
-                                          color: Colors.white,
-                                          size: 50,
-                                        ),
-                                      ),
                               ),
-                            ),
 
-                            const SizedBox(height: 30),
+                              const SizedBox(height: 30),
 
-                            // Name
-                            TextFormField(
-                              decoration: const InputDecoration(labelText: 'Name'),
-                              controller: name,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your name';
-                                }
-                                return null; // Return null if the input is valid.
-                              },
-                            ),
-
-                            const SizedBox(height: 40),
-
-                            // Button Save
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    save(name.text, context);
+                              // Name
+                              TextFormField(
+                                decoration: const InputDecoration(labelText: 'Name'),
+                                controller: name,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your name';
                                   }
+                                  return null; // Return null if the input is valid.
                                 },
-                                child: const Text('Save'),
                               ),
-                            ),
 
-                            const SizedBox(height: 20),
+                              const SizedBox(height: 40),
 
-                            // Button Cancel
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.pink[300],
-                                    foregroundColor: Colors.white),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
+                              // Button Save
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      save(name.text, context);
+                                    }
+                                  },
+                                  child: const Text('Save'),
+                                ),
                               ),
-                            ),
-                          ],
+
+                              const SizedBox(height: 20),
+
+                              // Button Cancel
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.pink[300],
+                                      foregroundColor: Colors.white),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
     );
   }
 }

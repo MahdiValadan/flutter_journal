@@ -29,7 +29,6 @@ class _AuthFormState extends State<AuthForm> {
       double py;
       double space1;
       double space2;
-
       if (screenWidth > 600) {
         py = 100;
         space1 = 40;
