@@ -126,7 +126,7 @@ class _EditProfileState extends State<EditProfile> {
               if (screenWidth > 600) {
                 m = 40;
               } else {
-                m = 20;
+                m = 30;
               }
               return Container(
                 height: double.infinity,

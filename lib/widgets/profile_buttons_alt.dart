@@ -95,7 +95,7 @@ class ProfileButtonsAlt extends StatelessWidget {
                 },
                 heroTag: 'unfollow',
                 elevation: 0,
-                label: const Text("unfollow"),
+                label: const Text("Unfollow"),
                 icon: const Icon(Icons.person_remove_alt_1),
                 backgroundColor: Colors.amber[100],
               );

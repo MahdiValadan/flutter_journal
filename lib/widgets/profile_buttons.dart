@@ -23,8 +23,8 @@ class ProfileButtons extends StatelessWidget {
             );
           },
           heroTag: 'Add Post',
-          elevation: 0,
-          label: const Text("Add Post"),
+          elevation: 2,
+          label: const Text("Create Journal"),
           icon: const Icon(Icons.post_add_outlined),
         ),
 
@@ -39,28 +39,10 @@ class ProfileButtons extends StatelessWidget {
             );
           },
           heroTag: 'Edit Info',
-          elevation: 0,
+          elevation: 2,
           label: const Text("Edit Info"),
           icon: const Icon(Icons.edit_outlined),
           backgroundColor: Colors.green[100],
-        ),
-
-        const SizedBox(width: 16.0),
-
-        // Logout Button
-        FloatingActionButton.extended(
-          onPressed: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const Auth()),
-            );
-          },
-          heroTag: 'logout',
-          elevation: 0,
-          backgroundColor: Colors.pink[100],
-          label: const Text("Logout"),
-          icon: const Icon(Icons.logout_outlined),
         ),
       ],
     );

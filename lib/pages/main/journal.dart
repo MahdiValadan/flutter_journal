@@ -56,7 +56,9 @@ class _ViewJournalState extends State<ViewJournal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: deleteButton(),
+      ),
       body: Container(
         height: double.infinity,
         decoration: const BoxDecoration(
@@ -69,7 +71,7 @@ class _ViewJournalState extends State<ViewJournal> {
           child: Column(
             children: [
               // ### User info
-              isCurrentUser ? deleteWidget() : JournalUserInfo(post: widget.post),
+              isCurrentUser ? const SizedBox.shrink() : JournalUserInfo(post: widget.post),
               const SizedBox(height: 10),
               // ### Journal Image
               JournalImage(post: widget.post),
@@ -82,17 +84,25 @@ class _ViewJournalState extends State<ViewJournal> {
     );
   }
 
-  Align deleteWidget() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: IconButton(
-        onPressed: () {
-          showPrompt(context);
-        },
-        icon: Icon(
-          Icons.delete_forever_outlined,
-          size: 40,
-          color: Colors.red[900],
+  Visibility deleteButton() {
+    return Visibility(
+      visible: isCurrentUser,
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: FloatingActionButton.small(
+            onPressed: () {
+              showPrompt(context);
+            },
+            backgroundColor: Colors.pink,
+            elevation: 4,
+            child: Icon(
+              Icons.delete_forever_outlined,
+              size: 30,
+              color: Colors.grey[300],
+            ),
+          ),
         ),
       ),
     );

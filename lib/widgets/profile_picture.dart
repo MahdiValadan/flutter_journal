@@ -1,16 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
+import 'package:flutter_journal/pages/auth/auth.dart';
 
 class ProfilePicture extends StatelessWidget {
-  ProfilePicture({super.key, required this.email});
+  ProfilePicture({super.key, required this.email, required this.isCurrentUser});
   final String email;
   final UserFunctions userFunctions = UserFunctions();
+  final bool isCurrentUser;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
+        // Blue Box
         Container(
           margin: const EdgeInsets.only(bottom: 50),
           decoration: const BoxDecoration(
@@ -25,6 +29,30 @@ class ProfilePicture extends StatelessWidget {
             ),
           ),
         ),
+        // Logout Button
+        Visibility(
+          visible: isCurrentUser,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
+              child: FloatingActionButton.small(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Auth()),
+                  );
+                },
+                heroTag: 'logout',
+                elevation: 2,
+                backgroundColor: Colors.pink[200],
+                child: const Icon(Icons.logout_outlined),
+              ),
+            ),
+          ),
+        ),
+        // IMAGE
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(

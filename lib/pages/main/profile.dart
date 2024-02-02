@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
 import 'package:flutter_journal/widgets/profile_buttons.dart';
@@ -25,7 +26,10 @@ class _ProfileState extends State<Profile> {
           // Profile Picture
           Expanded(
             flex: 2,
-            child: ProfilePicture(email: widget.userEmail),
+            child: ProfilePicture(
+              email: widget.userEmail,
+              isCurrentUser: widget.isCurrentUser,
+            ),
           ),
 
           // Profile name & buttons & info

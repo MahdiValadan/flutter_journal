@@ -20,7 +20,7 @@ class FollowList extends StatelessWidget {
               return Column(
                 children: [
                   ViewFollowCard(name: item, type: title),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 0),
                 ],
               );
             }).toList(),

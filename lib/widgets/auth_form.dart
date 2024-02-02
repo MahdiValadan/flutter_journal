@@ -27,20 +27,23 @@ class _AuthFormState extends State<AuthForm> {
       MediaQueryData mediaQuery = MediaQuery.of(context);
       var screenWidth = mediaQuery.size.width;
       double py;
+      double mx;
       double space1;
       double space2;
       if (screenWidth > 600) {
         py = 100;
+        mx = 60;
         space1 = 40;
         space2 = 80;
       } else {
         py = 30;
+        mx = 30;
         space1 = 20;
-        space2 = 44;
+        space2 = 30;
       }
       return Card(
         elevation: 0,
-        margin: const EdgeInsets.all(30.0),
+        margin: EdgeInsets.symmetric(vertical: 30.0, horizontal: mx),
         color: Colors.blueGrey.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

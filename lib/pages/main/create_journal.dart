@@ -124,10 +124,10 @@ class _CreateJournalState extends State<CreateJournal> {
               double m;
               double imageH;
               if (screenWidth > 600) {
-                m = 40;
-                imageH = 300;
+                m = 0;
+                imageH = 350;
               } else {
-                m = 10;
+                m = 0;
                 imageH = 200;
               }
               return Container(
@@ -143,13 +143,6 @@ class _CreateJournalState extends State<CreateJournal> {
                   elevation: 0,
                   margin: EdgeInsets.all(m),
                   color: Colors.white.withOpacity(0.4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: const BorderSide(
-                      color: Colors.black, // Border color
-                      width: 1.0, // Border width
-                    ),
-                  ),
                   // Frosted Glass
                   child: ClipRect(
                     child: BackdropFilter(
@@ -209,7 +202,6 @@ class _CreateJournalState extends State<CreateJournal> {
 
                               // Space
                               const SizedBox(height: 20),
-
                               // Content
                               Container(
                                 constraints: const BoxConstraints(maxHeight: 230),
@@ -230,9 +222,8 @@ class _CreateJournalState extends State<CreateJournal> {
                                   },
                                 ),
                               ),
-
+                              // Expanded Space
                               const Expanded(child: SizedBox()),
-
                               // Button Save
                               SizedBox(
                                 width: double.infinity,
@@ -253,10 +244,8 @@ class _CreateJournalState extends State<CreateJournal> {
                                   child: const Text('Save'),
                                 ),
                               ),
-
                               // Space
                               const SizedBox(height: 20),
-
                               // Button Cancel
                               SizedBox(
                                 width: double.infinity,
@@ -272,6 +261,8 @@ class _CreateJournalState extends State<CreateJournal> {
                                   child: const Text('Cancel'),
                                 ),
                               ),
+                              //Space
+                              const SizedBox(height: 20),
                             ],
                           ),
                         ),
