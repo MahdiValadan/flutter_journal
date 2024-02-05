@@ -38,6 +38,7 @@ class _ViewJournalState extends State<ViewJournal> {
           .where('Email', isEqualTo: widget.post['Email'])
           .where('Image', isEqualTo: widget.post['Image'])
           .where('Title', isEqualTo: widget.post['Title'])
+          .where('Location', isEqualTo: widget.post['Location'])
           .get();
       String document = querySnapshot.docs.first.id;
       await postCollection.doc(document).delete();
@@ -49,7 +50,7 @@ class _ViewJournalState extends State<ViewJournal> {
       userPosts.remove(document);
       await userCollection.doc(currentUser).update({'posts': userPosts});
     } catch (e) {
-      print('Error getting data from Firestore: $e');
+      print('Error deleting data from Firestore: $e');
     }
   }
 
@@ -57,10 +58,13 @@ class _ViewJournalState extends State<ViewJournal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: deleteButton(),
+        backgroundColor: Colors.teal[200],
+        toolbarHeight: 90,
+        title: isCurrentUser ? deleteButton() : JournalUserInfo(post: widget.post),
       ),
       body: Container(
         height: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg-white.jpg'),
@@ -70,12 +74,9 @@ class _ViewJournalState extends State<ViewJournal> {
           filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
           child: Column(
             children: [
-              // ### User info
-              isCurrentUser ? const SizedBox.shrink() : JournalUserInfo(post: widget.post),
-              const SizedBox(height: 10),
               // ### Journal Image
               JournalImage(post: widget.post),
-              // ### Title
+              // ### Content
               JournalContent(post: widget.post),
             ],
           ),
@@ -84,24 +85,21 @@ class _ViewJournalState extends State<ViewJournal> {
     );
   }
 
-  Visibility deleteButton() {
-    return Visibility(
-      visible: isCurrentUser,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: FloatingActionButton.small(
-            onPressed: () {
-              showPrompt(context);
-            },
-            backgroundColor: Colors.pink,
-            elevation: 4,
-            child: Icon(
-              Icons.delete_forever_outlined,
-              size: 30,
-              color: Colors.grey[300],
-            ),
+  Widget deleteButton() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: FloatingActionButton.small(
+          onPressed: () {
+            showPrompt(context);
+          },
+          backgroundColor: Colors.pink,
+          elevation: 4,
+          child: Icon(
+            Icons.delete_forever_outlined,
+            size: 30,
+            color: Colors.grey[300],
           ),
         ),
       ),

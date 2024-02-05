@@ -53,7 +53,7 @@ class ViewFollowCard extends StatelessWidget {
         border: Border.all(color: Colors.black),
         color: Colors.blueGrey.withOpacity(0.3),
       ),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
       child: TextButton(
         style: TextButton.styleFrom(foregroundColor: Colors.black),
         onPressed: () {

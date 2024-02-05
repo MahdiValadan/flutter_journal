@@ -12,10 +12,21 @@ class JournalContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       alignment: Alignment.centerLeft,
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.place_outlined,
+                size: 15,
+              ),
+              Text(post['Location'] ?? ""),
+            ],
+          ),
+          const SizedBox(height: 10),
           Center(
             child: Text(
               post['Title'],
