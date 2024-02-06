@@ -16,13 +16,14 @@ class JournalContent extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            direction: Axis.horizontal,
             children: [
-              const Icon(
-                Icons.place_outlined,
-                size: 15,
-              ),
+              if (post['Location'].toString().isNotEmpty && post['Location'] != null)
+                const Icon(
+                  Icons.place_outlined,
+                  size: 15,
+                ),
               Text(post['Location'] ?? ""),
             ],
           ),
@@ -35,18 +36,9 @@ class JournalContent extends StatelessWidget {
             ),
           ),
           const Divider(),
-          Container(
-            height: 270,
-            alignment: Alignment.topLeft,
-            child: Scrollbar(
-              // thumbVisibility: true,
-              child: SingleChildScrollView(
-                child: Text(
-                  post['Content'],
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-            ),
+          Text(
+            post['Content'],
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
       ),

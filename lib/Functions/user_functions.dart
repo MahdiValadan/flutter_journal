@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:logger/logger.dart';
 
 class UserFunctions {
+  var logger = Logger();
   late String currentUserEmail;
-
   final firebaseAuth = FirebaseAuth.instance;
   final firestoreDB = FirebaseFirestore.instance;
-
   init() {
     currentUserEmail = firebaseAuth.currentUser?.email ?? '';
   }
@@ -16,7 +16,6 @@ class UserFunctions {
   UserFunctions() {
     init();
   }
-
   String getCurrentUserEmail() {
     return currentUserEmail;
   }
@@ -31,7 +30,7 @@ class UserFunctions {
         data = doc.data() as Map<String, dynamic>;
         name = data['name'];
       },
-      onError: (e) => print("Error getting document: $e"),
+      onError: (e) => logger.e("Error getting document: ", error: e),
     );
     return name;
   }
@@ -44,7 +43,7 @@ class UserFunctions {
       (DocumentSnapshot doc) {
         data = doc.data() as Map<String, dynamic>;
       },
-      onError: (e) => print("Error getting document: $e"),
+      onError: (e) => logger.e("Error getting document: ", error: e),
     );
     return data;
   }
@@ -63,7 +62,7 @@ class UserFunctions {
         return null;
       }
       // rethrow; // Other errors
-      print('ERROR FirebaseStorage: $e');
+      logger.e('ERROR FirebaseStorage: ', error: e);
       return null;
     }
   }

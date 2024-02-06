@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
@@ -7,15 +6,17 @@ import 'package:flutter_journal/pages/main/landing.dart';
 import 'package:flutter_journal/widgets/journal_content.dart';
 import 'package:flutter_journal/widgets/journal_image.dart';
 import 'package:flutter_journal/widgets/journal_user_info.dart';
+import 'package:logger/logger.dart';
 
-class ViewJournal extends StatefulWidget {
-  const ViewJournal({super.key, required this.post});
+class Journal extends StatefulWidget {
+  const Journal({super.key, required this.post});
   final Map<String, dynamic> post;
   @override
-  State<ViewJournal> createState() => _ViewJournalState();
+  State<Journal> createState() => _JournalState();
 }
 
-class _ViewJournalState extends State<ViewJournal> {
+class _JournalState extends State<Journal> {
+  var logger = Logger();
   UserFunctions userFunctions = UserFunctions();
   late String currentUser;
   bool isCurrentUser = false;
@@ -50,7 +51,7 @@ class _ViewJournalState extends State<ViewJournal> {
       userPosts.remove(document);
       await userCollection.doc(currentUser).update({'posts': userPosts});
     } catch (e) {
-      print('Error deleting data from Firestore: $e');
+      logger.e('Error deleting data from Firestore: ', error: e);
     }
   }
 
@@ -62,23 +63,27 @@ class _ViewJournalState extends State<ViewJournal> {
         toolbarHeight: 90,
         title: isCurrentUser ? deleteButton() : JournalUserInfo(post: widget.post),
       ),
-      body: Container(
-        height: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg-white.jpg'),
-          ),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-          child: Column(
-            children: [
-              // ### Journal Image
-              JournalImage(post: widget.post),
-              // ### Content
-              JournalContent(post: widget.post),
-            ],
+      body: Scrollbar(
+        trackVisibility: true,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/bg-white.jpg'),
+              ),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+              child: Column(
+                children: [
+                  // ### Journal Image
+                  JournalImage(post: widget.post),
+                  // ### Content
+                  JournalContent(post: widget.post),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -109,15 +114,22 @@ class _ViewJournalState extends State<ViewJournal> {
   void showPrompt(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context2) {
         return AlertDialog(
           title: const Text('Warning'),
           content: const Text('Are you sure to delete this post?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                // Action for the second button
-                Navigator.of(context).pop(); // Close the dialog
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context2).pop();
                 deletePost();
                 Navigator.pushReplacement(
                   context,
@@ -125,13 +137,6 @@ class _ViewJournalState extends State<ViewJournal> {
                 );
               },
               child: const Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Action for the first button
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('No'),
             ),
           ],
         );

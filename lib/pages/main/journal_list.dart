@@ -14,7 +14,7 @@ class JournalList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Journals')),
       body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 30),
+        // padding: const EdgeInsets.symmetric(vertical: 0),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -41,7 +41,6 @@ class JournalList extends StatelessWidget {
                 }
                 // If the Future has completed successfully, use the data
                 List<Map<String, dynamic>> posts = snapshot.data ?? [];
-
                 return ListView.builder(
                   itemCount: posts.length,
                   itemBuilder: (BuildContext context, int index) {

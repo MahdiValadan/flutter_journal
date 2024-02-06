@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 // Widget
 import 'package:flutter_journal/widgets/alert.dart';
@@ -22,6 +23,7 @@ class CreateJournal extends StatefulWidget {
 }
 
 class _CreateJournalState extends State<CreateJournal> {
+  var logger = Logger();
   // Controllers
   final _formKey = GlobalKey<FormState>();
   final TextEditingController title = TextEditingController();
@@ -35,6 +37,7 @@ class _CreateJournalState extends State<CreateJournal> {
   //Location
   final kInitialPosition = const LatLng(-33.8567844, 151.213108);
   String location = "Pick Location";
+
   // # PICK IMAGE FUNCTION
   Future<void> pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -48,70 +51,95 @@ class _CreateJournalState extends State<CreateJournal> {
   }
 
   // # SAVE FUNCTION
-  Future<void> save(name, context) async {
+  Future<void> save(context) async {
     setState(() {
       isLoading = true;
     });
     if (FirebaseAuth.instance.currentUser != null) {
+      // # UPLOAD IMAGE TO STORAGE #
       FirebaseFirestore db = FirebaseFirestore.instance;
-
       String? email = FirebaseAuth.instance.currentUser?.email;
-
       const uuid = Uuid();
       String imageName = uuid.v4();
-      String imageUrl;
-
+      String imageUrl = "";
       final Reference storageReference =
           FirebaseStorage.instance.ref().child('posts/$email/$imageName.jpg');
       final metadata = SettableMetadata(contentType: 'image/jpeg');
-
       try {
         await storageReference.putFile(pickedImage, metadata);
         imageUrl = await storageReference.getDownloadURL();
-
-        var post = <String, dynamic>{
-          'Email': email,
-          'Title': title.text,
-          'Content': content.text,
-          'Image': imageUrl,
-          'Location': location
-        };
-
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        showAlertDialog(context, 'Error Uplaoding Image', e.toString());
+        logger.e("Error Uploading Journal Image", error: e.toString());
+        return;
+      }
+      // # ADD POST DATA TO DB #
+      var post = <String, dynamic>{
+        'Email': email,
+        'Title': title.text,
+        'Content': content.text,
+        'Image': imageUrl,
+        'Location': location
+      };
+      String documentId = "";
+      try {
         DocumentReference documentReference = await db.collection('posts').add(post);
-        String documentId = documentReference.id;
-
+        documentId = documentReference.id;
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        showAlertDialog(context, 'Error Adding Journal', e.toString());
+        logger.e("Error Adding Journal", error: e.toString());
+        return;
+      }
+      // # UPDATING USER DATA
+      try {
         // Fetch the current data from Firestore
         DocumentSnapshot documentSnapshot = await db.collection('users').doc(email).get();
-
         Map<String, dynamic> currentData = documentSnapshot.data() as Map<String, dynamic>;
-
         // Extract the current list from the document
         List<dynamic> newList = currentData['posts'] ?? [];
-
         // Modify the list (add a new element)
         newList.add(documentId);
-
         // Update the entire list in Firestore
         await db.collection('users').doc(email).update({'posts': newList});
-
+        // Back To Profile Page
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Landing(pageIndex: 2)),
         );
       } catch (e) {
-        showAlertDialog(context, 'Error', e.toString());
+        setState(() {
+          isLoading = false;
+        });
+        showAlertDialog(context, 'Error Updating User Post Data', e.toString());
+        logger.e("Error Updating User Post Data", error: e.toString());
+        return;
       }
     } else {
       showAlertDialog(context, 'Error', 'Invalid Access');
+      logger.e("Error Log", error: "Invalid Access");
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   // WIDGET
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    var screenWidth = mediaQuery.size.width;
+    double imageH;
+    if (screenWidth > 600) {
+      imageH = 350;
+    } else {
+      imageH = 200;
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -120,102 +148,96 @@ class _CreateJournalState extends State<CreateJournal> {
       ),
       body: isLoading
           ? const Loading()
-          : Builder(builder: (context) {
-              MediaQueryData mediaQuery = MediaQuery.of(context);
-              var screenWidth = mediaQuery.size.width;
-              double imageH;
-              if (screenWidth > 600) {
-                imageH = 350;
-              } else {
-                imageH = 200;
-              }
-              return Container(
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Colors.blue, Colors.white],
-                  ),
+          : Container(
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.blue, Colors.white],
                 ),
-                child: Card(
-                  elevation: 0,
-                  margin: const EdgeInsets.all(0),
-                  color: Colors.white.withOpacity(0.4),
-                  // Frosted Glass
-                  child: ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              //Post Picture
-                              wPicture(imageH),
-                              //Space
-                              const SizedBox(height: 30),
-                              // Title
-                              wTitle(),
-                              // Space
-                              const SizedBox(height: 20),
-                              // Content
-                              wContent(),
-                              // Expanded Space
-                              const Expanded(child: SizedBox()),
-                              // LOCATION
-                              wPickLocationBtn(),
-                              // SPACE
-                              const SizedBox(height: 20),
-                              // SAVE and Cancle Button
-                              wSaveAndCancleBtn(context),
-                              // SPACE
-                              const SizedBox(height: 20),
-                            ],
-                          ),
+              ),
+              child: Card(
+                elevation: 0,
+                margin: const EdgeInsets.all(0),
+                color: Colors.white.withOpacity(0.4),
+                // Frosted Glass
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            //Post Picture
+                            wPicture(imageH),
+                            //Space
+                            const SizedBox(height: 30),
+                            // Title
+                            wTitle(),
+                            // Space
+                            const SizedBox(height: 20),
+                            // Content
+                            wContent(),
+                            // Expanded Space
+                            const Expanded(child: SizedBox()),
+                            // LOCATION
+                            wPickLocationBtn(),
+                            // SPACE
+                            const SizedBox(height: 30),
+                            // SAVE and Cancle Button
+                            wSaveAndCancleBtn(context),
+                            // SPACE
+                            const SizedBox(height: 20),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              );
-            }),
+              ),
+            ),
     );
   }
 
-  SizedBox wPickLocationBtn() {
-    return SizedBox(
-      // height: 50,
-      // width: double.infinity,
-      child: FloatingActionButton.extended(
-        backgroundColor: Colors.orange[700],
-        foregroundColor: Colors.white,
-        label: Text(location),
-        icon: const Icon(Icons.place_outlined),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlacePicker(
-                apiKey: "AIzaSyCOwaSNRXoWHCXgZMJIYE3oKuwih4A7QMY",
-                initialPosition: kInitialPosition,
-                useCurrentLocation: true,
-                resizeToAvoidBottomInset:
-                    false, // only works in page mode, less flickery, remove if wrong offsets
-                onPlacePicked: (PickResult result) {
-                  print(result.formattedAddress);
-                  setState(() {
-                    location = result.formattedAddress ?? "";
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          );
-        },
+  Widget wPickLocationBtn() {
+    return FloatingActionButton.extended(
+      backgroundColor: Colors.orange[700],
+      foregroundColor: Colors.white,
+      label: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 200),
+        child: Text(
+          location,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
+      icon: const Icon(Icons.place_outlined),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlacePicker(
+              apiKey: "AIzaSyCOwaSNRXoWHCXgZMJIYE3oKuwih4A7QMY",
+              initialPosition: kInitialPosition,
+              useCurrentLocation: true,
+              // only works in page mode, less flickery, remove if wrong offsets
+              resizeToAvoidBottomInset: false,
+              usePlaceDetailSearch: true,
+              onPlacePicked: (PickResult result) {
+                logger.i(result.name);
+                logger.i(result.formattedAddress);
+                setState(() {
+                  location = result.formattedAddress ?? "";
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -226,7 +248,7 @@ class _CreateJournalState extends State<CreateJournal> {
       children: [
         // Button Save
         SizedBox(
-          width: 100,
+          width: 120,
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -235,7 +257,7 @@ class _CreateJournalState extends State<CreateJournal> {
             ),
             onPressed: () {
               if (_formKey.currentState!.validate() && showImage) {
-                save(content.text, context);
+                save(context);
               } else {
                 showAlertDialog(
                     context, 'Error', 'Please Choose Image and Enter both title and content');
@@ -248,7 +270,7 @@ class _CreateJournalState extends State<CreateJournal> {
         const SizedBox(width: 20),
         // Button Cancel
         SizedBox(
-          width: 100,
+          width: 120,
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -267,7 +289,7 @@ class _CreateJournalState extends State<CreateJournal> {
 
   Container wContent() {
     return Container(
-      constraints: const BoxConstraints(maxHeight: 200),
+      constraints: const BoxConstraints(maxHeight: 250),
       child: TextFormField(
         keyboardType: TextInputType.multiline,
         decoration: const InputDecoration(

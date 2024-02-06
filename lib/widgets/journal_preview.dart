@@ -15,7 +15,7 @@ class JournalPreview extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewJournal(post: post)),
+          MaterialPageRoute(builder: (context) => Journal(post: post)),
         );
       },
       child: Container(

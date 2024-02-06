@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_journal/Functions/user_functions.dart';
+import 'package:logger/logger.dart';
 
 class PostFunctions {
+  var logger = Logger();
   // Get All the Posts From Database for Explore Page
   Future<List<Map<String, dynamic>>> getAllData(String collectionName) async {
     List<Map<String, dynamic>> data = [];
@@ -17,7 +19,7 @@ class PostFunctions {
 
       return data;
     } catch (e) {
-      print('Error getting data from Firestore: $e');
+      logger.e('Error getting data from Firestore: ', error: e);
       return [];
     }
   }
@@ -43,7 +45,7 @@ class PostFunctions {
         return [];
       }
     } catch (e) {
-      print('Error getting data from Firestore: $e');
+      logger.e('Error getting data from Firestore: ', error: e);
       return [];
     }
   }
@@ -70,7 +72,7 @@ class PostFunctions {
       }
       return data;
     } catch (e) {
-      print('Error getting data from Firestore: $e');
+      logger.e('Error getting data from Firestore: ', error: e);
       return [];
     }
   }

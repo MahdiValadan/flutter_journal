@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:logger/logger.dart';
 
 class FileUploader {
+  var logger = Logger();
   File file;
   String fileName;
   FileUploader(this.file, this.fileName);
@@ -13,9 +15,9 @@ class FileUploader {
       final metadata = SettableMetadata(contentType: 'image/jpeg');
       UploadTask uploadTask = storageReference.putFile(file, metadata);
 
-      await uploadTask.whenComplete(() => print('File uploaded'));
+      await uploadTask.whenComplete(() => logger.i('File uploaded'));
     } catch (e) {
-      print('Error uploading file: $e');
+      logger.e("Error uploading file: ", error: e);
     }
   }
 }

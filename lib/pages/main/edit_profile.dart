@@ -11,6 +11,7 @@ import 'package:flutter_journal/widgets/alert.dart';
 import 'package:flutter_journal/widgets/loading.dart';
 // Page
 import 'package:flutter_journal/pages/main/landing.dart';
+import 'package:logger/logger.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.firstTime});
@@ -20,13 +21,12 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  var logger = Logger();
   // Controllers
   final _formKey = GlobalKey<FormState>();
   final TextEditingController name = TextEditingController();
-
   // Loading Status
   bool isLoading = false;
-
   // Profile Image
   XFile? image;
   File? pickedImage;
@@ -66,7 +66,7 @@ class _EditProfileState extends State<EditProfile> {
         try {
           await fileUploader.uploadFile();
         } catch (e) {
-          print(e);
+          logger.e("Error Uploading profile picture: ", error: e);
         }
       }
 
@@ -110,6 +110,7 @@ class _EditProfileState extends State<EditProfile> {
         });
   }
 
+  // UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,130 +120,119 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: isLoading
           ? const Loading()
-          : Builder(builder: (context) {
-              MediaQueryData mediaQuery = MediaQuery.of(context);
-              var screenWidth = mediaQuery.size.width;
-              double m;
-              if (screenWidth > 600) {
-                m = 40;
-              } else {
-                m = 30;
-              }
-              return Container(
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Colors.blue, Colors.white],
+          : Container(
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.blue, Colors.white],
+                ),
+              ),
+              child: Card(
+                elevation: 0,
+                margin: const EdgeInsets.all(10),
+                color: Colors.white.withOpacity(0.4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  side: const BorderSide(
+                    color: Colors.black, // Border color
+                    width: 1.0, // Border width
                   ),
                 ),
-                child: Card(
-                  elevation: 0,
-                  margin: EdgeInsets.all(m),
-                  color: Colors.white.withOpacity(0.4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: const BorderSide(
-                      color: Colors.black, // Border color
-                      width: 1.0, // Border width
-                    ),
-                  ),
-                  // Frosted Glass
-                  child: ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              //Profile Picture
-                              InkWell(
-                                onTap: () {
-                                  pickeImageBottons();
-                                },
-                                child: Container(
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.cyan,
-                                  ),
-                                  child: showImage
-                                      ? ClipOval(
-                                          child: Image.file(
-                                            pickedImage!,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : const Center(
-                                          child: Icon(
-                                            Icons.add_a_photo_outlined,
-                                            color: Colors.white,
-                                            size: 50,
-                                          ),
+                // Frosted Glass
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            //Profile Picture
+                            InkWell(
+                              onTap: () {
+                                pickeImageBottons();
+                              },
+                              child: Container(
+                                width: 100.0,
+                                height: 100.0,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.cyan,
+                                ),
+                                child: showImage
+                                    ? ClipOval(
+                                        child: Image.file(
+                                          pickedImage!,
+                                          fit: BoxFit.cover,
                                         ),
-                                ),
+                                      )
+                                    : const Center(
+                                        child: Icon(
+                                          Icons.add_a_photo_outlined,
+                                          color: Colors.white,
+                                          size: 50,
+                                        ),
+                                      ),
                               ),
+                            ),
 
-                              const SizedBox(height: 30),
+                            const SizedBox(height: 30),
 
-                              // Name
-                              TextFormField(
-                                decoration: const InputDecoration(labelText: 'Name'),
-                                controller: name,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your name';
+                            // Name
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Name'),
+                              controller: name,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null; // Return null if the input is valid.
+                              },
+                            ),
+
+                            const SizedBox(height: 150),
+                            // Button Save
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    save(name.text, context);
                                   }
-                                  return null; // Return null if the input is valid.
                                 },
+                                child: const Text('Save'),
                               ),
+                            ),
 
-                              const SizedBox(height: 40),
+                            const SizedBox(height: 20),
 
-                              // Button Save
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      save(name.text, context);
-                                    }
-                                  },
-                                  child: const Text('Save'),
-                                ),
+                            // Button Cancel
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.pink[300],
+                                    foregroundColor: Colors.white),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
                               ),
-
-                              const SizedBox(height: 20),
-
-                              // Button Cancel
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.pink[300],
-                                      foregroundColor: Colors.white),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              );
-            }),
+              ),
+            ),
     );
   }
 }
