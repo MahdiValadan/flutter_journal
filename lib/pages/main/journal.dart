@@ -78,9 +78,15 @@ class _JournalState extends State<Journal> {
               child: Column(
                 children: [
                   // ### Journal Image
-                  JournalImage(post: widget.post),
+                  JournalImage(
+                    key: const ValueKey('journalImage'),
+                    post: widget.post,
+                  ),
                   // ### Content
-                  JournalContent(post: widget.post),
+                  JournalContent(
+                    key: const ValueKey('journalContent'),
+                    post: widget.post,
+                  ),
                 ],
               ),
             ),

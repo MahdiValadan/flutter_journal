@@ -64,6 +64,7 @@ class _AuthFormState extends State<AuthForm> {
                 children: <Widget>[
                   // Email
                   TextFormField(
+                    key: const ValueKey('emailInput'),
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(labelText: 'Email'),
                     controller: email,
@@ -80,6 +81,7 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(height: space1),
                   // Passworld
                   TextFormField(
+                    key: const ValueKey('passwordInput'),
                     decoration: const InputDecoration(labelText: 'Password'),
                     obscureText: true,
                     controller: password,
@@ -91,10 +93,12 @@ class _AuthFormState extends State<AuthForm> {
                     },
                   ),
                   SizedBox(height: space2),
+                  // Submit Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
+                      key: const ValueKey('submitBtn'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           widget.submit(email.text, password.text, widget.context);

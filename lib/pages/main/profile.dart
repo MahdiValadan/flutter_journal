@@ -91,6 +91,7 @@ class _ProfileState extends State<Profile> {
 
                       // PROFILE INFO
                       return ProfileInfo(
+                        key: const ValueKey('profileInfo'),
                         info: data,
                         userEmail: widget.userEmail,
                         isCurrentUser: widget.isCurrentUser,

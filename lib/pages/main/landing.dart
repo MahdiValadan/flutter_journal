@@ -38,11 +38,13 @@ class LandingState extends State<Landing> {
             label: 'Home',
           ),
           NavigationDestination(
+            key:  Key('exploreBtn'),
             selectedIcon: Icon(Icons.explore),
             icon: Icon(Icons.explore_outlined),
             label: 'Explore',
           ),
           NavigationDestination(
+            key: Key('profileBtn'),
             selectedIcon: Icon(Icons.account_circle),
             icon: Icon(Icons.account_circle_outlined),
             label: 'Proflie',

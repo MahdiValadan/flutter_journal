@@ -60,6 +60,7 @@ class _HomeState extends State<Home> {
                     );
                   }
                   return ListView.builder(
+                    key: const ValueKey('homeJournalList'),
                     itemCount: posts.length,
                     itemBuilder: (BuildContext context, int index) {
                       final post = posts[index];

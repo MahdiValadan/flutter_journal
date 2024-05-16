@@ -47,7 +47,13 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 child: Row(
                   children: [
                     if (items.indexOf(item) != 0) const VerticalDivider(),
-                    Expanded(child: _singleItem(context, item)),
+                    Expanded(
+                      key: ValueKey('profileInfoItem-${items.indexOf(item)}'),
+                      child: _singleItem(
+                        context,
+                        item,
+                      ),
+                    ),
                   ],
                 ),
               ),

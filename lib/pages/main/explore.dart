@@ -48,10 +48,14 @@ class _ExploreState extends State<Explore> {
                   List<Map<String, dynamic>> posts = snapshot.data ?? [];
 
                   return ListView.builder(
+                    key: const ValueKey('exploreJournalList'),
                     itemCount: posts.length,
                     itemBuilder: (BuildContext context, int index) {
                       final post = posts[index];
-                      return JournalPreview(post: post);
+                      return JournalPreview(
+                        key: ValueKey('journalPreview-$index'),
+                        post: post,
+                      );
                     },
                   );
                 }),

@@ -127,7 +127,7 @@ class ViewFollowCard extends StatelessWidget {
                 type == 'Following' ? unFollow() : removeFromFollowers();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const Landing(pageIndex: 2)),
+                  MaterialPageRoute(builder: (context) => const Landing(pageIndex: 1)),
                 );
               },
               style: ElevatedButton.styleFrom(

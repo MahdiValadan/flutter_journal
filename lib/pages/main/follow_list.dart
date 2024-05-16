@@ -16,6 +16,7 @@ class FollowList extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
+            key: const ValueKey('followList'),
             children: followList.map((item) {
               return Column(
                 children: [
