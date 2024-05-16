@@ -4,18 +4,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logger/logger.dart';
 
 class UserFunctions {
+  bool? isTesting;
   var logger = Logger();
   late String currentUserEmail;
   final firebaseAuth = FirebaseAuth.instance;
   final firestoreDB = FirebaseFirestore.instance;
-  init() {
-    currentUserEmail = firebaseAuth.currentUser?.email ?? '';
+  // Constructor
+  UserFunctions([this.isTesting]) {
+    if (isTesting != null) {
+      currentUserEmail = 'test@test.com';
+    } else {
+      currentUserEmail = firebaseAuth.currentUser?.email ?? '';
+    }
   }
 
-  // Constructor
-  UserFunctions() {
-    init();
-  }
+  // Get Corrent User
   String getCurrentUserEmail() {
     return currentUserEmail;
   }
