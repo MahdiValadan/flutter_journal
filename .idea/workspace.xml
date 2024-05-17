@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="7fce24c3-4f73-4137-9bc0-acb85ca26b2c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main/explore.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main/explore.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main/landing.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main/landing.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main/profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/auth_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/auth_form.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/follow_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/follow_card.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/funchtions_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +30,8 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "/Users/mahdi/Documents/Projects/flutter_journal"
+    "last_opened_file_path": "/Users/mahdi/Documents/Projects/flutter_journal",
+    "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

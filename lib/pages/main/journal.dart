@@ -68,11 +68,6 @@ class _JournalState extends State<Journal> {
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/bg-white.jpg'),
-              ),
-            ),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
               child: Column(
