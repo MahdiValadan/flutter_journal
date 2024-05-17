@@ -16,10 +16,9 @@ void main() {
     'followers': ['test1@test.com', 'test2@test.com'],
     'following': ['test3@test.com'],
     'name': 'test name',
-    'post': 'test post id',
+    'posts': ['test-post-1-id', 'test-post-2-id', 'test-post-3-id'],
   };
-  testWidgets('testing JournalContent', (WidgetTester tester) async {
-
+  testWidgets('Testing JournalContent', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(
       home: Directionality(
         textDirection: TextDirection.ltr,
@@ -29,24 +28,26 @@ void main() {
     expect(find.text(post['Location']), findsOneWidget);
     expect(find.text(post['Title']), findsOneWidget);
     expect(find.text(post['Content']), findsOneWidget);
-
-    // Tap the '+' icon and trigger a frame.
-    // await tester.tap(find.byIcon(Icons.add));
-    // await tester.pump();
   });
-  testWidgets('test ProfileInfo', (tester) async {
+  testWidgets('Testing ProfileInfo', (tester) async {
     await tester.pumpWidget(const MaterialApp(
       home: Directionality(
-          textDirection: TextDirection.ltr,
-          child: ProfileInfo(info: user, userEmail: 'test@test.com', isCurrentUser: true)),
+        textDirection: TextDirection.ltr,
+        child: ProfileInfo(info: user, userEmail: 'test@test.com', isCurrentUser: true,),
+      ),
     ));
-    // expect(find.text(text), matcher)
+    expect(find.text('Posts'), findsOneWidget);
+    expect(find.text('3'), findsOneWidget);
+    expect(find.text('Followers'), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
+    expect(find.text('Following'), findsOneWidget);
+    expect(find.text('1'), findsOneWidget);
   });
-  testWidgets('ProfileName', (tester) async {
+  testWidgets('Testing ProfileName', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Directionality(
-          textDirection: TextDirection.ltr, // or TextDirection.rtl
+          textDirection: TextDirection.ltr,
           child: ProfileName(name: 'test name'),
         ),
       ),
