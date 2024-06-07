@@ -18,7 +18,7 @@ class UserFunctions {
     }
   }
 
-  // Get Corrent User
+  // Get Current User
   String getCurrentUserEmail() {
     return currentUserEmail;
   }
