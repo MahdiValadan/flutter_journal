@@ -1,4 +1,4 @@
-# flutter Journal
+# Flutter Journal
 
 ## Introduction
 
