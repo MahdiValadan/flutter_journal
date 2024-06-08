@@ -16,7 +16,7 @@ The Flutter Journal App is a mobile application that allows users to create, man
 - Secure Data Storage (Firestore, Firebase Storage)
 
 ## Demo
-To see the app demo, [click here]([http://example.com](https://youtu.be/uge37Am3DRA)) .
+To see the app demo, [click here](https://youtu.be/uge37Am3DRA).
  
 ## Installation
 
