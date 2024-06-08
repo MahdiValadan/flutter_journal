@@ -14,6 +14,9 @@ The Flutter Journal App is a mobile application that allows users to create, man
 - Multimedia Support (Photos, Location)
 - Location Tagging
 - Secure Data Storage (Firestore, Firebase Storage)
+
+## Demo
+To see the app demo, [click here]([http://example.com](https://youtu.be/uge37Am3DRA)).
  
 ## Installation
 
